@@ -126,5 +126,10 @@ namespace EMS.Service
             return _service.GetRoles();
         }
 
+        public Boolean IsEmailUnique(GetEmail email)
+        {
+            return _service.IsEmailUnique(email);
+        }
+
     }
 }

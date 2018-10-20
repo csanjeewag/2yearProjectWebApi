@@ -334,6 +334,20 @@ namespace EMS.API.Controllers
             try { return Ok(res); } catch { return BadRequest("error get roles!"); }
         }
 
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [HttpPost("isuniqueemail")]
+        public Boolean IsEmailUnique([FromBody]GetEmail email)
+        {
+            try
+            {
+                return _service.IsEmailUnique(email);
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
     }
 }

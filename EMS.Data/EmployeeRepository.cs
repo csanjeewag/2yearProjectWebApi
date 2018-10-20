@@ -242,5 +242,22 @@ namespace EMS.Data
             return positions;
         }
 
+        public Boolean IsEmailUnique(GetEmail email)
+        {
+            var data = _context.Employees
+                  .Where(c => c.EmpEmail == email.Email)
+                  .Select(c => c.EmpId)
+                  .FirstOrDefault();
+            
+             if (string.IsNullOrEmpty(data))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
     }
 }
