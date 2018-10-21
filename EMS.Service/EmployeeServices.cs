@@ -58,7 +58,7 @@ namespace EMS.Service
 
         }
 
-        public Boolean AddEmployee(Employee emp)
+        public int AddEmployee(Employee emp)
         {
             return _service.AddEmployee(emp);
         }
@@ -74,6 +74,7 @@ namespace EMS.Service
 
         public Boolean UpdateEmployee(Employee emp)
         {
+            emp.IsActive = true;
             return _service.UpdateEmployee(emp);
         }
 
@@ -131,5 +132,16 @@ namespace EMS.Service
             return _service.IsEmailUnique(email);
         }
 
+        public Boolean RemoveEmployee(string id)
+        {
+            return _service.RemoveEmployee(id);
+        }
+
+        public Boolean RegisterEmployee( RegisterActive reg)
+        {
+          return  _service.RegisterEmployee(reg);
+        }
+
     }
+
 }

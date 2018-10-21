@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using EMS.API.Ulities;
 using EMS.Data.GetModels;
 using EMS.Data.Models;
 using EMS.Service;
@@ -133,9 +134,11 @@ namespace EMS.API.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody]Employee emp)
         {
+            int logincode = _service.AddEmployee(emp);
 
-            if (_service.AddEmployee(emp))
+              if (logincode > 0)
             {
+                Boolean SendCode = SendMail.SendloginCode(logincode.ToString(), emp.EmpEmail);
 
                 return Ok(emp);
             }
@@ -240,36 +243,10 @@ namespace EMS.API.Controllers
                 var data = _service.GetEmployeeById(logins.EmpId);
                 var Emprole = data.PositionPId;
                 var Empid = data.EmpId;
+                var EmpName = data.EmpName;
+                
 
-                //    var claims = new[]
-                //{
-                //    new Claim(JwtRegisteredClaimNames.Sub,datas),
-                //    new Claim(JwtRegisteredClaimNames.Email, logins.EmpId),
-                //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-
-                //};
-
-                //    var signingkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("creativesoftware@12345moratuwaproject"));
-
-                //    var token = new JwtSecurityToken(
-                //        issuer: "http://oec.com",
-                //        audience: "http://oec.com",
-                //        expires: DateTime.UtcNow.AddHours(1),
-                //        claims: claims,
-                //        signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(signingkey, SecurityAlgorithms.HmacSha256)
-
-
-
-                //        );
-
-                //    return Ok(new
-                //    {
-                //        token = new JwtSecurityTokenHandler().WriteToken(token),
-                //        expiration = token.ValidTo
-                //    });
-
-
-                GetTokenModel token = GetToken.getToken(Emprole, Empid);
+                GetTokenModel token = GetToken.getToken(Emprole, Empid, EmpName );
 
                 return Ok(new
                 {
@@ -289,13 +266,18 @@ namespace EMS.API.Controllers
         [HttpPost("loginEmail")]
         public IActionResult loginEmail([FromBody]LoginEmail logins)
         {
+            
+
             if (_service.LoginEmail(logins))
             {
                 var data = _service.GetEmployeeByEmail(logins.EmpEmail);
                 var Emprole = data.PositionPId;
+                var EmpName = data.EmpName;
                 var Empid = data.EmpId;
+                
 
-                GetTokenModel token = GetToken.getToken(Emprole, Empid);
+                
+                GetTokenModel token = GetToken.getToken(Emprole, Empid, EmpName);
 
                 return Ok(new
                 {
@@ -349,5 +331,21 @@ namespace EMS.API.Controllers
             }
         }
 
+        [Produces("application/json")]
+        [HttpGet("deleteEmployee/{id}")]
+        public Boolean RemoveEmployee(string id)
+        {
+            return _service.RemoveEmployee(id);
+        }
+
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [HttpPost("registeremployee")]
+        public IActionResult RegisterEmployee([FromBody]RegisterActive reg)
+        {
+
+            if (_service.RegisterEmployee(reg)) { return Ok(); }
+            else { return BadRequest(); }
+        }
     }
 }

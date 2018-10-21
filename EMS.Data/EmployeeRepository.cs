@@ -15,10 +15,12 @@ namespace EMS.Data
             _context = context;
         }
 
+        
         public IEnumerable<Employee> GetAll()
         {
 
             var employees = _context.Employees
+                .Where(c=> c.IsActive==true)
                 //.Where(c => c.Name.Contains("s"))
                 //.OrderByDescending(c => c.Name)
                 //.ThenBy(c => c.BlogId)
@@ -33,6 +35,7 @@ namespace EMS.Data
         {
 
             var corses = _context.Employees
+                .Where(c => c.IsActive == true)
                 .Where(c => c.EmpId == id).FirstOrDefault();
             //.OrderByDescending(c => c.Name)
             //.ThenBy(c => c.BlogId)
@@ -74,18 +77,32 @@ namespace EMS.Data
 
         }
 
-        public Boolean AddEmployee(Employee emp)
+        public int AddEmployee(Employee emp)
         {
+            GetEmail checkemail = new GetEmail();
+            checkemail.Email = emp.EmpEmail;
+
             try
             {
-                _context.Employees.Add(emp);
-                _context.SaveChanges();
+                if (this.IsEmailUnique(checkemail)==false)
+                {
+                    Random rand = new Random((int)DateTime.Now.Ticks);
+                    int numIterations = rand.Next(10000, 99999);
 
-                return true;
+                    DateTime today = DateTime.Today;
+                    emp.StartDate = today;
+                    emp.RegisterCode = numIterations.ToString();
+                    emp.PositionPId = "RC";
+                    _context.Employees.Add(emp);
+                    _context.SaveChanges();
+
+                    return numIterations;
+                }
+                return 0;
             }
             catch
             {
-                return false;
+                return 0;
             }
         }
         public Boolean AddDepartment(Department dprt) 
@@ -121,6 +138,7 @@ namespace EMS.Data
         {
             try
             {
+                
                 _context.Entry(emp).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
                 return true;
@@ -161,6 +179,7 @@ namespace EMS.Data
         public Boolean LoginId(LoginId log)
         {
             var data = _context.Employees
+                  
                   .Where(c => c.EmpId == log.EmpId && c.EmpPassword == log.EmpPassword)
                   .Select(c => c.EmpId)
                   .FirstOrDefault();
@@ -178,32 +197,41 @@ namespace EMS.Data
 
         public Boolean LoginEmail(LoginEmail log)
         {
-            var data = _context.Employees
-                  .Where(c => c.EmpEmail == log.EmpEmail && c.EmpPassword == log.EmpPassword)
-                  .Select(c => c.EmpId)
-                  .FirstOrDefault();
+            GetEmail getEmail = new GetEmail();
+            getEmail.Email = log.EmpEmail;
 
-            if (string.IsNullOrEmpty(data))
+            if (this.IsEmailUnique(getEmail))
             {
-                return false;
+                var data = _context.Employees
+            .Where(c => c.EmpEmail == log.EmpEmail && c.EmpPassword == log.EmpPassword)
+            .Select(c => c.EmpId)
+            .FirstOrDefault();
+
+                if (string.IsNullOrEmpty(data))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
-            else
-            {
-                return true;
-            }
+            return false;
+          
 
         }
 
         public IEnumerable<GetEmployeesDetails> GetEmployeesDetails() 
         {
             var test = _context.Employees
-
+                .Where(c => c.IsActive == true)
                .Join(_context.Departments,
+
                e => e.DepartmentDprtId, d => d.DprtId, (e, d) =>
                   new { e, d })
                .Join(_context.Positions,
                    e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                        => new GetEmployeesDetails { EmpId=e2.e.EmpId,EmpName=e2.e.EmpName, EmpContact=e2.e.EmpContact, EmpAddress1=e2.e.EmpAddress1, EmpAddress2=e2.e.EmpAddress2, EmpGender=e2.e.EmpGender, EmpPosition=p.PositionName, EmpDepartment=e2.d.DprtName, EmpEmail=e2.e.EmpEmail})
+                        => new GetEmployeesDetails { EmpId=e2.e.EmpId,EmpName=e2.e.EmpName, EmpContact=e2.e.EmpContact, EmpAddress1=e2.e.EmpAddress1, EmpAddress2=e2.e.EmpAddress2, EmpGender=e2.e.EmpGender, EmpPosition=p.PositionName, EmpDepartment=e2.d.DprtName, EmpEmail=e2.e.EmpEmail,EmpStartDate=e2.e.StartDate})
                         .ToList()
              
                   ;
@@ -214,13 +242,14 @@ namespace EMS.Data
         public GetEmployeesDetails GetEmployeeDetails(string id)
         {
             var test = _context.Employees
+                .Where(c => c.IsActive == true)
                 .Where(c => c.EmpId == id)
                .Join(_context.Departments,
                e => e.DepartmentDprtId, d => d.DprtId, (e, d) =>
                   new { e, d })
                .Join(_context.Positions,
                    e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                        => new GetEmployeesDetails { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail })
+                        => new GetEmployeesDetails { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate=e2.e.StartDate})
                         .FirstOrDefault()
 
                   ;
@@ -246,18 +275,65 @@ namespace EMS.Data
         {
             var data = _context.Employees
                   .Where(c => c.EmpEmail == email.Email)
-                  .Select(c => c.EmpId)
+                  .Select(c => c.IsActive)
                   .FirstOrDefault();
             
-             if (string.IsNullOrEmpty(data))
-            {
-                return false;
-            }
-            else
+             if (data)
             {
                 return true;
             }
+            else
+            {
+                return false;
+            }
 
+        }
+
+        public Boolean RemoveEmployee(string id)
+        {
+            try {
+                Employee employee = new Employee();
+                employee = this.GetEmployeeById(id);
+                employee.IsActive = false;
+                this.UpdateEmployee(employee);
+                return true;
+            } catch
+            {
+                return false;
+            }
+                        
+        }
+
+        public Boolean RegisterEmployee(RegisterActive reg)
+        {
+            try
+            {
+                GetEmail getEmail = new GetEmail();
+                getEmail.Email = reg.RegisterEmpEmail;
+
+                if (this.IsEmailUnique(getEmail) == false)
+                {
+                    var data = _context.Employees
+                .Where(c => c.EmpEmail == reg.RegisterEmpEmail && c.RegisterCode == reg.RegisterCode)
+                .Select(c => c.EmpEmail)
+                .FirstOrDefault();
+
+                    if (string.IsNullOrEmpty(data))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        var employee = _context.Employees.Where(c => c.EmpEmail == reg.RegisterEmpEmail && c.RegisterCode == reg.RegisterCode).FirstOrDefault();
+                        employee.IsActive = true;
+                        _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                        _context.SaveChanges();
+                        return true;
+                    }
+                }
+                return false;
+            } catch { return false; }
+               
         }
     }
 }

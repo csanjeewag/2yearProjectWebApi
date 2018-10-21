@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 using EMS.Data.GetModels;
 using Microsoft.IdentityModel.Tokens;
 
-namespace EMS.API.Controllers
+namespace EMS.API.Ulities
 {
     public class GetToken
     {
-        public static GetTokenModel getToken(string role , string email)
+        public static GetTokenModel getToken(string role , string id , string name)
         {
 
             var claims = new[]
        {
                 new Claim(JwtRegisteredClaimNames.Sub,role),
-                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(JwtRegisteredClaimNames.NameId, id),
+                new Claim(JwtRegisteredClaimNames.UniqueName, name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 
             };

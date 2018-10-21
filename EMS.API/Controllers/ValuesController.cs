@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using EMS.API.Ulities;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
 
 namespace EMS.API.Controllers
 {
@@ -20,6 +24,8 @@ namespace EMS.API.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
+            SendMail.SendEmail("csanjeewag96@gmail.com", "hvfj", "gehdjwe");
+
             return "value";
         }
 

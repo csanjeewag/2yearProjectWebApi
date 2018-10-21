@@ -14,7 +14,9 @@ namespace EMS.Data.Models
         public string EmpName { get; set; }
         public string EmpContact { get; set; }
         public string EmpAddress1 { get; set; }
+
         public string EmpAddress2 { get; set; }
+        
         public string EmpEmail { get; set; }
         public string EmpPassword { get; set; }
         public string EmpGender { get; set; }
@@ -23,7 +25,10 @@ namespace EMS.Data.Models
          
         [ForeignKey("Department")]
         public string DepartmentDprtId { get; set; } 
-          
+        public DateTime StartDate { get; set; }
+        public Boolean IsActive { get; set; }
+        public string RegisterCode { get; set; }
+        
 
     }
 }
