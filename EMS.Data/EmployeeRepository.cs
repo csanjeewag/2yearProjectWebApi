@@ -293,8 +293,13 @@ namespace EMS.Data
         {
             try {
                 Employee employee = new Employee();
+                Random rand = new Random((int)DateTime.Now.Ticks);
+                int numIterations = rand.Next(10000, 99999);
+
                 employee = this.GetEmployeeById(id);
                 employee.IsActive = false;
+
+                employee.RegisterCode = numIterations.ToString();
                 this.UpdateEmployee(employee);
                 return true;
             } catch
@@ -334,6 +339,54 @@ namespace EMS.Data
                 return false;
             } catch { return false; }
                
+        }
+
+        public int ForgetPassword( string email)
+        {
+            try {
+                GetEmail getEmail = new GetEmail();
+                getEmail.Email = email;
+                if (this.IsEmailUnique(getEmail) == true)
+                {
+                    Random rand = new Random((int)DateTime.Now.Ticks);
+                    int numIterations = rand.Next(10000, 99999);
+
+                    Employee employee = new Employee();
+                    employee = GetEmployeeByEmail(email);
+                    employee.RegisterCode = numIterations.ToString();
+                    UpdateEmployee(employee);
+                    return numIterations;
+
+
+                }
+                return 0;
+            } catch {
+                return 0;
+            }
+            
+
+        }
+
+        public Boolean SetEmailAndPassword(GetEmailPassword getEP)
+        {
+            GetEmail getEmail = new GetEmail();
+            getEmail.Email = getEP.EmpEmail;
+
+            if (this.IsEmailUnique(getEmail) == true)
+            {
+                Random rand = new Random((int)DateTime.Now.Ticks);
+                int numIterations = rand.Next(10000, 99999);
+                Employee employee = new Employee();
+                employee = GetEmployeeByEmail(getEP.EmpEmail);
+                if(employee.RegisterCode == getEP.Code) {
+                    employee.EmpPassword = getEP.EmpPassword;
+                    employee.RegisterCode = numIterations.ToString();
+                    UpdateEmployee(employee);
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
     }
 }

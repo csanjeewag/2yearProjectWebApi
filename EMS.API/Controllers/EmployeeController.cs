@@ -138,7 +138,7 @@ namespace EMS.API.Controllers
 
               if (logincode > 0)
             {
-                Boolean SendCode = SendMail.SendloginCode(logincode.ToString(), emp.EmpEmail);
+                Boolean SendCode = SendMail.SendloginCode(logincode.ToString(), emp.EmpEmail,emp.EmpName);
 
                 return Ok(emp);
             }
@@ -344,8 +344,36 @@ namespace EMS.API.Controllers
         public IActionResult RegisterEmployee([FromBody]RegisterActive reg)
         {
 
-            if (_service.RegisterEmployee(reg)) { return Ok(); }
+            if (_service.RegisterEmployee(reg)) { return Ok();
+
+            }
             else { return BadRequest(); }
+        }
+
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [HttpGet("forgetpassword/{id}")]
+        public IActionResult ForgetPassword(string id)
+        {
+            var code = _service.ForgetPassword(id);
+            if ( code> 0)
+            {
+               if( SendMail.SendForgetPasswordCode(code.ToString(), id, " buddy")) 
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [HttpPost("setpassword")]
+        public IActionResult SetEmailAndPassword([FromBody]GetEmailPassword getEP)
+        {
+            if(_service.SetEmailAndPassword(getEP))
+            {
+                return Ok();
+            }
+          return  BadRequest();
         }
     }
 }

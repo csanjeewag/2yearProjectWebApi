@@ -142,6 +142,15 @@ namespace EMS.Service
           return  _service.RegisterEmployee(reg);
         }
 
+        public int ForgetPassword(string email)
+        {
+            return _service.ForgetPassword(email);
+        }
+
+        public Boolean SetEmailAndPassword(GetEmailPassword getEP)
+        {
+            return _service.SetEmailAndPassword(getEP);
+        }
     }
 
 }
