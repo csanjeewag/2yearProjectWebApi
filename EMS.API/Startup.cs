@@ -32,12 +32,12 @@ namespace EMS.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
-          //  string connectionstring = "Data Source=DESKTOP-RUHANGI\\SQLEXPRESS;Initial Catalog=DBEMS;Integrated Security=True";
 
+            //  string connectionstring = "Data Source=DESKTOP-RUHANGI\\SQLEXPRESS;Initial Catalog=DBEMS;Integrated Security=True";
+            string connectionstring = "Server=tcp :dbems1.database.windows.net;Database= DBEMS ;User ID = sanjeewa ;Password= Chanaka*1102;Trusted_Connection=false;MultipleActiveResultSets=true";
             services.AddMvc();
-             services.AddDbContext<EMSContext>(cfg => cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            // services.AddDbContext<EMSContext>(cfg => cfg.UseSqlServer(connectionstring));
+           //  services.AddDbContext<EMSContext>(cfg => cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+             services.AddDbContext<EMSContext>(cfg => cfg.UseSqlServer(connectionstring));
            
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
