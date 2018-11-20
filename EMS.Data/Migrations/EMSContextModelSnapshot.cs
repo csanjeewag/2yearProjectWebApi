@@ -104,6 +104,8 @@ namespace EMS.Data.Migrations
 
                     b.Property<string>("EmpPassword");
 
+                    b.Property<string>("EmpProfilePicture");
+
                     b.Property<bool>("IsActive");
 
                     b.Property<string>("PositionId");

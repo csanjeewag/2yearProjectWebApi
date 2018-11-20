@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -30,7 +31,24 @@ namespace EMS.API.Controllers
             _service = new EmployeeServices(_context);
         }
 
-
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload(FileUpload f)
+        {
+            try
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(),
+                 "wwwroot/Image", f.Image.FileName);
+                var stream = new FileStream(path, FileMode.Create);
+                f.Image.CopyToAsync(stream);
+                return Ok(new { lenght = f.Image.Length, name = f.Image });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
         [Produces("application/json")]
         [HttpGet("test")]
@@ -138,6 +156,7 @@ namespace EMS.API.Controllers
 
               if (logincode > 0)
             {
+                
                 Boolean SendCode = SendMail.SendloginCode(logincode.ToString(), emp.EmpEmail,emp.EmpName);
 
                 return Ok(emp);

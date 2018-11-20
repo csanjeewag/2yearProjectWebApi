@@ -28,6 +28,7 @@ namespace EMS.Data.Models
         public DateTime StartDate { get; set; }
         public Boolean IsActive { get; set; }
         public string RegisterCode { get; set; }
+        public string EmpProfilePicture { get; set; }
         
 
     }

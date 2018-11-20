@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +38,7 @@ namespace EMS.API
             services.AddMvc();
              services.AddDbContext<EMSContext>(cfg => cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             // services.AddDbContext<EMSContext>(cfg => cfg.UseSqlServer(connectionstring));
+           
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<EMSContext>()
@@ -76,7 +79,8 @@ namespace EMS.API
 
             app.UseAuthentication();
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
-           // app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }
