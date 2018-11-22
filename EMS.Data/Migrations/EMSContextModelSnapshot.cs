@@ -125,6 +125,28 @@ namespace EMS.Data.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("EMS.Data.Models.EventImages", b =>
+                {
+                    b.Property<string>("ImageId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Author");
+
+                    b.Property<string>("Caption");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("EventId");
+
+                    b.Property<bool>("IsActive");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("EventImages");
+                });
+
             modelBuilder.Entity("EMS.Data.Models.Position", b =>
                 {
                     b.Property<string>("PositionId")
@@ -137,6 +159,18 @@ namespace EMS.Data.Migrations
                     b.HasKey("PositionId");
 
                     b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Test", b =>
+                {
+                    b.Property<string>("EmpName")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("EmpName");
+
+                    b.ToTable("Tests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

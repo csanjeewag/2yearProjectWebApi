@@ -74,7 +74,9 @@ namespace EMS.Service
 
         public Boolean UpdateEmployee(Employee emp)
         {
+            
             emp.IsActive = true;
+
             return _service.UpdateEmployee(emp);
         }
 

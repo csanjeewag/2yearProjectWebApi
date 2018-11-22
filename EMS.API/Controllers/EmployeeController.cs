@@ -147,23 +147,51 @@ namespace EMS.API.Controllers
 
         }
 
-        [Produces("application/json")]
-        [Consumes("application/json")]
+      
         [HttpPost("create")]
-        public IActionResult Create([FromBody]Employee emp)
+        public IActionResult Create([FromForm]GetEmployee emp)
         {
-            int logincode = _service.AddEmployee(emp);
-
-              if (logincode > 0)
+            try
             {
-                
-                Boolean SendCode = SendMail.SendloginCode(logincode.ToString(), emp.EmpEmail,emp.EmpName);
+                string res = "";
+                if (emp.EmpProfilePicture != null)
+                {
+                    res = AddFiles.AddImage(emp.EmpProfilePicture, emp.EmpId);
 
-                return Ok(emp);
+                }
+
+                Employee employee = new Employee();
+                employee.EmpId = emp.EmpId;
+                employee.EmpEmail = emp.EmpEmail;
+                employee.EmpPassword = emp.EmpPassword;
+                employee.EmpName = emp.EmpName;
+                employee.EmpContact = emp.EmpContact;
+                employee.EmpAddress1 = emp.EmpAddress1;
+                employee.EmpAddress2 = emp.EmpAddress2;
+                employee.EmpGender = emp.EmpGender;
+                employee.PositionPId = emp.PositionPId;
+                employee.DepartmentDprtId = emp.DepartmentDprtId;
+                employee.EmpProfilePicture = res;
+
+                int logincode = _service.AddEmployee(employee);
+
+
+                if (logincode > 0)
+                {
+
+
+                    Boolean SendCode = SendMail.SendloginCode(logincode.ToString(), emp.EmpEmail, emp.EmpName);
+
+                    return Ok(emp);
+                }
+                else
+                {
+                    return BadRequest("there error");
+                }
             }
-            else
+            catch
             {
-                return BadRequest("there error");
+                return BadRequest();
             }
         }
 
@@ -201,13 +229,34 @@ namespace EMS.API.Controllers
         }
 
 
-        [Produces("application/json")]
-        [Consumes("application/json")]
+        //[Produces("application/json")]
+        //[Consumes("application/json")]
         [HttpPost("updateemployee")]
-        public IActionResult UpdateEmployee([FromBody]Employee emp)
+        public IActionResult UpdateEmployee([FromForm]GetEmployee emp)
         {
+            string res = "";
+            if (emp.EmpProfilePicture != null)
+            {
+                res = AddFiles.AddImage(emp.EmpProfilePicture, emp.EmpId);
 
-            if (_service.UpdateEmployee(emp))
+            }
+
+            Employee employee = new Employee();
+            employee.EmpId = emp.EmpId;
+            employee.EmpEmail = emp.EmpEmail;
+            employee.EmpPassword = emp.EmpPassword;
+            employee.EmpName = emp.EmpName;
+            employee.EmpContact = emp.EmpContact;
+            employee.EmpAddress1 = emp.EmpAddress1;
+            employee.EmpAddress2 = emp.EmpAddress2;
+            employee.EmpGender = emp.EmpGender;
+            employee.PositionPId = emp.PositionPId;
+            employee.DepartmentDprtId = emp.DepartmentDprtId;
+            employee.EmpProfilePicture = res;
+            employee.IsActive = emp.IsActive;
+            employee.StartDate = emp.StartDate;
+
+            if (_service.UpdateEmployee(employee))
             {
 
                 return Ok(emp);

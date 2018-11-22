@@ -22,6 +22,8 @@ namespace EMS.Data.Models
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<EventImages> EventImages { get; set; }
       
     }
 }

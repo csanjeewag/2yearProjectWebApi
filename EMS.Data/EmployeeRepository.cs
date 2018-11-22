@@ -136,9 +136,16 @@ namespace EMS.Data
 
         public Boolean UpdateEmployee(Employee emp)
         {
+           
             try
             {
-                
+                var employee = _context.Employees.Where(c => c.EmpEmail == emp.EmpEmail).Select(c => new { c.EmpProfilePicture, c.PositionPId , c.RegisterCode }).FirstOrDefault();
+                if (emp.PositionPId == null || emp.PositionPId == "")
+                { emp.PositionPId = employee.PositionPId; }
+                emp.RegisterCode = employee.RegisterCode;
+                if (emp.EmpProfilePicture ==null || emp.EmpProfilePicture=="")
+                { emp.EmpProfilePicture = employee.EmpProfilePicture; }
+
                 _context.Entry(emp).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
                 return true;
@@ -249,7 +256,7 @@ namespace EMS.Data
                   new { e, d })
                .Join(_context.Positions,
                    e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                        => new GetEmployeesDetails { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate=e2.e.StartDate})
+                        => new GetEmployeesDetails { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate=e2.e.StartDate, EmpProfilePicture = e2.e.EmpProfilePicture})
                         .FirstOrDefault()
 
                   ;

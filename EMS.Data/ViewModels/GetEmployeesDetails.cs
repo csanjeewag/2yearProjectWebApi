@@ -18,6 +18,7 @@ namespace EMS.Data.ViewModels
         public string EmpGender { get; set; }
         public string EmpPosition { get; set; }
         public string EmpDepartment{ get; set; } 
+        public string EmpProfilePicture { get; set; }
         public DateTime EmpStartDate { get; set; }
     }
 }
