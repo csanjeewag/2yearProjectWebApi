@@ -120,24 +120,7 @@ namespace EMS.API.Controllers
 
         }
 
-        [Produces("application/json")]
-        [HttpGet("getdepartment/{id}")]
-
-        public Department GetDepartmentId(string id)
-        {
-            return _service.GetDepartmentById(id);
-
-        }
-
-        [Produces("application/json")]
-        [HttpGet("getposition/{id}")]
-
-        public Position GetPositonById(string id)
-        {
-            return _service.GetPositionById(id);
-
-        }
-
+   
         [Produces("application/json")]
         [HttpGet("email/{id}")]
 
@@ -195,38 +178,7 @@ namespace EMS.API.Controllers
             }
         }
 
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("createdepartment")]
-        public IActionResult CreateDepartment([FromBody]Department dprt)
-        {
-
-            if (_service.AddDepartment(dprt))
-            {
-
-                return Ok(dprt);
-            }
-            else
-            {
-                return BadRequest("there error");
-            }
-        }
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("createposition")]
-        public IActionResult Createposition([FromBody]Position pos)
-        {
-
-            if (_service.AddPosition(pos))
-            {
-
-                return Ok(pos);
-            }
-            else
-            {
-                return BadRequest("there error");
-            }
-        }
+      
 
 
         //[Produces("application/json")]
@@ -269,13 +221,13 @@ namespace EMS.API.Controllers
 
         [Consumes("application/json")]
         [HttpPost("updaterole")]
-        public IActionResult UpdateRole([FromForm]GetUpdateRole role)
+        public IActionResult UpdatePosition([FromForm]GetUpdatePosition position)
         {
-            
-            if (_service.UpdateRole(role))
+
+            if (_service.UpdatePosition(position))
             {
 
-                return Ok(role);
+                return Ok(position);
             }
             else
             {
@@ -283,38 +235,8 @@ namespace EMS.API.Controllers
             }
         }
 
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("updatedepartment")]
-        public IActionResult UpdateDepartment([FromBody]Department dprt)
-        {
-
-            if (_service.UpdateDepartment(dprt))
-            {
-
-                return Ok(dprt);
-            }
-            else
-            {
-                return BadRequest("there error");
-            }
-        }
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("updatePosition")]
-        public IActionResult UpdatePosition([FromBody]Position role)
-        {
-
-            if (_service.UpdatePosition(role))
-            {
-
-                return Ok(role);
-            }
-            else
-            {
-                return BadRequest("there error");
-            }
-        }
+     
+      
         [Produces("application/json")]
         [Consumes("application/json")]
         [HttpPost("login")]
@@ -378,27 +300,8 @@ namespace EMS.API.Controllers
 
         }
 
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpGet("getdepartments")]
-        public IActionResult GetDepartments()
-        {
-
-           var res = _service.GetDepartments();
-
-            try { return Ok(res); } catch { return BadRequest("error get departments!"); }
-        }
-
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpGet("getroles")]
-        public IActionResult GetRoles()
-        {
-
-            var res = _service.GetRoles();
-
-            try { return Ok(res); } catch { return BadRequest("error get roles!"); }
-        }
+        
+     
 
         [Produces("application/json")]
         [Consumes("application/json")]

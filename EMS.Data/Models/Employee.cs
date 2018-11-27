@@ -10,6 +10,8 @@ namespace EMS.Data.Models
     public class Employee 
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string EmpId { get; set; }
         public string EmpName { get; set; }
         public string EmpContact { get; set; }
@@ -26,6 +28,7 @@ namespace EMS.Data.Models
         [ForeignKey("Department")]
         public string DepartmentDprtId { get; set; } 
         public DateTime StartDate { get; set; }
+        public DateTime? LastUpdate { get; set; }
         public Boolean IsActive { get; set; }
         public string RegisterCode { get; set; }
         public string EmpProfilePicture { get; set; }

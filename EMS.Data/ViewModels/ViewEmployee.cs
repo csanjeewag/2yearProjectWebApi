@@ -6,9 +6,9 @@ using System.Text;
 
 namespace EMS.Data.ViewModels
 {
-   public class GetEmployeesDetails
+   public class ViewEmployee
     {
-        [Key]
+        
         public string EmpId { get; set; }
         public string EmpName { get; set; }
         public string EmpContact { get; set; }

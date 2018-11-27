@@ -15,89 +15,57 @@ namespace EMS.Data
             _context = context;
         }
 
-        
+        //return all employees in employee table.
         public IEnumerable<Employee> GetAll()
         {
 
             var employees = _context.Employees
                 .Where(c=> c.IsActive==true)
-                //.Where(c => c.Name.Contains("s"))
-                //.OrderByDescending(c => c.Name)
-                //.ThenBy(c => c.BlogId)
                 .ToList();
-            //var employees = _context.Blogs.ToList();
+                  return employees;
+
+        }
+
+        //return one employee acroding to employee id
+        public Employee GetEmployeeById(string id)
+        {
+
+            var employees = _context.Employees
+                .Where(c => c.IsActive == true)
+                .Where(c => c.EmpId == id)
+                .OrderByDescending(c => c.Id)
+                .FirstOrDefault();
 
             return employees;
 
         }
 
-        public Employee GetEmployeeById(string id)
-        {
-
-            var corses = _context.Employees
-                .Where(c => c.IsActive == true)
-                .Where(c => c.EmpId == id).FirstOrDefault();
-            //.OrderByDescending(c => c.Name)
-            //.ThenBy(c => c.BlogId)
-
-            //var employees = _context.Blogs.ToList();
-
-            return corses;
-
-        }
-        public Department GetDepartmentById(string id)
-        {
-
-            var corses = _context.Departments
-                .Where(c => c.DprtId == id).FirstOrDefault();
-         
-            return corses;
-
-        }
-        public Position GetPositionById(string id)
-        {
-
-            var corses = _context.Positions
-                .Where(c => c.PositionId == id).FirstOrDefault();
-
-            return corses;
-
-        }
-        public Employee GetEmployeeByEmail(string email)
-        {
-
-            var corses = _context.Employees
-                .Where(c => c.EmpEmail == email).FirstOrDefault();
-            //.OrderByDescending(c => c.Name)
-            //.ThenBy(c => c.BlogId)
-
-            //var employees = _context.Blogs.ToList();
-
-            return corses;
-
-        }
-
-        public int AddEmployee(Employee emp)
+        //add a employee to employee table
+        public int AddEmployee(Employee employee)
         {
             GetEmail checkemail = new GetEmail();
-            checkemail.Email = emp.EmpEmail;
+            checkemail.Email = employee.EmpEmail;
 
             try
             {
-                if (this.IsEmailUnique(checkemail)==false)
+                if (this.IsEmailUnique(checkemail) == false)
                 {
+                    //create a random number for register employee
                     Random rand = new Random((int)DateTime.Now.Ticks);
-                    int numIterations = rand.Next(10000, 99999);
+                    int regitercode = rand.Next(10000, 99999);
 
+                    //generate today date
                     DateTime today = DateTime.Today;
-                    emp.StartDate = today;
-                    emp.RegisterCode = numIterations.ToString();
-                    emp.PositionPId = "RC";
-                    _context.Employees.Add(emp);
+                    employee.StartDate = today;
+                    employee.LastUpdate = today;
+                    employee.RegisterCode = regitercode.ToString();
+                    employee.PositionPId = "RC";
+                    _context.Employees.Add(employee);
                     _context.SaveChanges();
-
-                    return numIterations;
+                    //return register code after signup
+                    return regitercode; 
                 }
+                //if did not unique email return 0
                 return 0;
             }
             catch
@@ -105,63 +73,23 @@ namespace EMS.Data
                 return 0;
             }
         }
-        public Boolean AddDepartment(Department dprt) 
-        {
-            try
-            {
-                _context.Departments.Add(dprt);
-                _context.SaveChanges();
 
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        public Boolean AddPosition ( Position pos)
+        //return boolean value after update employee
+        public Boolean UpdateEmployee(Employee employee)
         {
-            try
-            {
-                _context.Positions.Add(pos);
-                _context.SaveChanges();
 
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public Boolean UpdateEmployee(Employee emp)
-        {
-           
             try
-            {
-                var employee = _context.Employees.Where(c => c.EmpEmail == emp.EmpEmail).Select(c => new { c.EmpProfilePicture, c.PositionPId , c.RegisterCode }).FirstOrDefault();
-                if (emp.PositionPId == null || emp.PositionPId == "")
-                { emp.PositionPId = employee.PositionPId; }
-                emp.RegisterCode = employee.RegisterCode;
-                if (emp.EmpProfilePicture ==null || emp.EmpProfilePicture=="")
-                { emp.EmpProfilePicture = employee.EmpProfilePicture; }
+            {   //get employees' positionid and profile pic name
+                var employeedetail = _context.Employees.Where(c => c.EmpEmail == employee.EmpEmail).Select(c => new { c.EmpProfilePicture, c.PositionPId, c.RegisterCode }).FirstOrDefault();
+                
+                if (employee.PositionPId == null || employee.PositionPId == "")
+                { employee.PositionPId = employeedetail.PositionPId; }
 
-                _context.Entry(emp).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        public Boolean UpdateRole(GetUpdateRole role)
-        {
-            
-            try
-            {
-                var employee = _context.Employees.Where(c => c.EmpEmail == role.Email).FirstOrDefault();
-                employee.PositionPId = role.RoleId;
+                employee.RegisterCode = employeedetail.RegisterCode;
+                //if there is not new employee picture leave the previous profile pic name
+                if (employee.EmpProfilePicture == null || employee.EmpProfilePicture == "")
+                { employee.EmpProfilePicture = employeedetail.EmpProfilePicture; }
+
                 _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
                 return true;
@@ -172,24 +100,89 @@ namespace EMS.Data
             }
         }
 
-        public Boolean UpdateDepartment(Department dprt)
+        //return all employees detils acroding to viewemployee interface
+        public IEnumerable<ViewEmployee> GetEmployeesDetails()
+        {
+            var employees = _context.Employees
+                .Where(c => c.IsActive == true)
+               .Join(_context.Departments,
+               // join department table
+               e => e.DepartmentDprtId, d => d.DprtId, (e, d) =>
+                  new { e, d })
+               .Join(_context.Positions,
+                   // join position table
+                   e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
+                        => new ViewEmployee { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate = e2.e.StartDate })
+                        .ToList();
+
+                  
+
+            return employees;
+        }
+
+        //return employee details for id without such as password 
+        public ViewEmployee GetEmployeeDetails(string id)
+        {
+            var employee = _context.Employees
+                .Where(c => c.IsActive == true)
+                .Where(c => c.EmpId == id)
+               .Join(_context.Departments,
+               e => e.DepartmentDprtId, d => d.DprtId, (e, d) =>
+                  new { e, d })
+               .Join(_context.Positions,
+                   e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
+                        => new ViewEmployee { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate = e2.e.StartDate, EmpProfilePicture = e2.e.EmpProfilePicture })
+                        .FirstOrDefault();
+
+                  
+
+            return employee;
+        }
+
+    
+        //deactive employee 
+        public Boolean RemoveEmployee(string id)
         {
             try
             {
-                _context.Entry(dprt).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
+                Employee employee = new Employee();
+                Random rand = new Random((int)DateTime.Now.Ticks);
+                int numIterations = rand.Next(10000, 99999);
+
+                employee = this.GetEmployeeById(id);
+                employee.IsActive = false;
+
+                employee.RegisterCode = numIterations.ToString();
+                this.UpdateEmployee(employee);
                 return true;
             }
             catch
             {
                 return false;
             }
+
         }
-        public Boolean UpdatePosition(Position role)
+
+        //return employee by email
+        public Employee GetEmployeeByEmail(string email)
         {
+
+            var corses = _context.Employees
+                .Where(c => c.EmpEmail == email).FirstOrDefault();
+            return corses;
+
+        }
+        //update position of employee
+        public Boolean UpdatePosition(GetUpdatePosition position)
+        {
+
             try
             {
-                _context.Entry(role).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                // assign employee details
+                var employee = _context.Employees.Where(c => c.EmpEmail == position.Email).FirstOrDefault();
+                //change position
+                employee.PositionPId = position.PositionId;
+                _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
                 return true;
             }
@@ -199,10 +192,11 @@ namespace EMS.Data
             }
         }
 
+        //check whether employee can login or not
         public Boolean LoginId(LoginId log)
         {
             var data = _context.Employees
-                  
+
                   .Where(c => c.EmpId == log.EmpId && c.EmpPassword == log.EmpPassword)
                   .Select(c => c.EmpId)
                   .FirstOrDefault();
@@ -218,6 +212,26 @@ namespace EMS.Data
 
         }
 
+        //check the email in the database
+        public Boolean IsEmailUnique(GetEmail email)
+        {
+            var data = _context.Employees
+                  .Where(c => c.EmpEmail == email.Email)
+                  .Select(c => c.IsActive)
+                  .FirstOrDefault();
+
+            if (data)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        // login by email
         public Boolean LoginEmail(LoginEmail log)
         {
             GetEmail getEmail = new GetEmail();
@@ -240,156 +254,41 @@ namespace EMS.Data
                 }
             }
             return false;
-          
+
 
         }
 
-        public IEnumerable<GetEmployeesDetails> GetEmployeesDetails() 
-        {
-            var test = _context.Employees
-                .Where(c => c.IsActive == true)
-               .Join(_context.Departments,
-
-               e => e.DepartmentDprtId, d => d.DprtId, (e, d) =>
-                  new { e, d })
-               .Join(_context.Positions,
-                   e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                        => new GetEmployeesDetails { EmpId=e2.e.EmpId,EmpName=e2.e.EmpName, EmpContact=e2.e.EmpContact, EmpAddress1=e2.e.EmpAddress1, EmpAddress2=e2.e.EmpAddress2, EmpGender=e2.e.EmpGender, EmpPosition=p.PositionName, EmpDepartment=e2.d.DprtName, EmpEmail=e2.e.EmpEmail,EmpStartDate=e2.e.StartDate})
-                        .ToList()
-             
-                  ;
-
-            return test ;
-        }
-
-        public GetEmployeesDetails GetEmployeeDetails(string id)
-        {
-            var test = _context.Employees
-                .Where(c => c.IsActive == true)
-                .Where(c => c.EmpId == id)
-               .Join(_context.Departments,
-               e => e.DepartmentDprtId, d => d.DprtId, (e, d) =>
-                  new { e, d })
-               .Join(_context.Positions,
-                   e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                        => new GetEmployeesDetails { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate=e2.e.StartDate, EmpProfilePicture = e2.e.EmpProfilePicture})
-                        .FirstOrDefault()
-
-                  ;
-
-            return test;
-        }
-
-        public IEnumerable<Department> GetDepartments()
-        {
-            var departments = _context.Departments
-               .ToList();
-            return departments;
-        }
-
-        public IEnumerable<Position> GetRoles()
-        {
-            var positions = _context.Positions
-               .ToList();
-            return positions;
-        }
-
-        public Boolean IsEmailUnique(GetEmail email)
-        {
-            var data = _context.Employees
-                  .Where(c => c.EmpEmail == email.Email)
-                  .Select(c => c.IsActive)
-                  .FirstOrDefault();
-            
-             if (data)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-
-        public Boolean RemoveEmployee(string id)
-        {
-            try {
-                Employee employee = new Employee();
-                Random rand = new Random((int)DateTime.Now.Ticks);
-                int numIterations = rand.Next(10000, 99999);
-
-                employee = this.GetEmployeeById(id);
-                employee.IsActive = false;
-
-                employee.RegisterCode = numIterations.ToString();
-                this.UpdateEmployee(employee);
-                return true;
-            } catch
-            {
-                return false;
-            }
-                        
-        }
-
-        public Boolean RegisterEmployee(RegisterActive reg)
+        //if forgot password genarate new register code
+        public int ForgetPassword(string email)
         {
             try
             {
-                GetEmail getEmail = new GetEmail();
-                getEmail.Email = reg.RegisterEmpEmail;
-
-                if (this.IsEmailUnique(getEmail) == false)
-                {
-                    var data = _context.Employees
-                .Where(c => c.EmpEmail == reg.RegisterEmpEmail && c.RegisterCode == reg.RegisterCode)
-                .Select(c => c.EmpEmail)
-                .FirstOrDefault();
-
-                    if (string.IsNullOrEmpty(data))
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        var employee = _context.Employees.Where(c => c.EmpEmail == reg.RegisterEmpEmail && c.RegisterCode == reg.RegisterCode).FirstOrDefault();
-                        employee.IsActive = true;
-                        _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                        _context.SaveChanges();
-                        return true;
-                    }
-                }
-                return false;
-            } catch { return false; }
-               
-        }
-
-        public int ForgetPassword( string email)
-        {
-            try {
                 GetEmail getEmail = new GetEmail();
                 getEmail.Email = email;
                 if (this.IsEmailUnique(getEmail) == true)
                 {
                     Random rand = new Random((int)DateTime.Now.Ticks);
-                    int numIterations = rand.Next(10000, 99999);
+                    int regitercode = rand.Next(10000, 99999);
 
                     Employee employee = new Employee();
                     employee = GetEmployeeByEmail(email);
-                    employee.RegisterCode = numIterations.ToString();
+                    employee.RegisterCode = regitercode.ToString();
                     UpdateEmployee(employee);
-                    return numIterations;
+                    return regitercode;
 
 
                 }
                 return 0;
-            } catch {
+            }
+            catch
+            {
                 return 0;
             }
-            
+
 
         }
 
+        //after forgot password update employee new password
         public Boolean SetEmailAndPassword(GetEmailPassword getEP)
         {
             GetEmail getEmail = new GetEmail();
@@ -401,7 +300,8 @@ namespace EMS.Data
                 int numIterations = rand.Next(10000, 99999);
                 Employee employee = new Employee();
                 employee = GetEmployeeByEmail(getEP.EmpEmail);
-                if(employee.RegisterCode == getEP.Code) {
+                if (employee.RegisterCode == getEP.Code)
+                {
                     employee.EmpPassword = getEP.EmpPassword;
                     employee.RegisterCode = numIterations.ToString();
                     UpdateEmployee(employee);
@@ -411,5 +311,48 @@ namespace EMS.Data
             }
             return false;
         }
+
+        // register employee using regiter code
+        public Boolean RegisterEmployee(RegisterActive reg)
+        {
+            try
+            {
+                GetEmail getEmail = new GetEmail();
+                getEmail.Email = reg.RegisterEmpEmail;
+
+                if (this.IsEmailUnique(getEmail) == false)
+                {
+                   
+
+                    var data = _context.Employees
+                .Where(c => c.EmpEmail == reg.RegisterEmpEmail && c.RegisterCode == reg.RegisterCode)
+                .Select(c => c.EmpEmail)
+                .FirstOrDefault();
+
+                    if (string.IsNullOrEmpty(data))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        //create new  random number for register code
+                        Random rand = new Random((int)DateTime.Now.Ticks);
+                        int regitercode = rand.Next(10000, 99999);
+
+                        var employee = _context.Employees.Where(c => c.EmpEmail == reg.RegisterEmpEmail && c.RegisterCode == reg.RegisterCode).FirstOrDefault();
+                        employee.IsActive = true;
+                        employee.RegisterCode = regitercode.ToString();
+                        _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                        _context.SaveChanges();
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch { return false; }
+
+        }
+
+      
     }
 }

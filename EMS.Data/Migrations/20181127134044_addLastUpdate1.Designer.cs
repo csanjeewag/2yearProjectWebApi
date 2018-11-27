@@ -11,9 +11,10 @@ using System;
 namespace EMS.Data.Migrations
 {
     [DbContext(typeof(EMSContext))]
-    partial class EMSContextModelSnapshot : ModelSnapshot
+    [Migration("20181127134044_addLastUpdate1")]
+    partial class addLastUpdate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

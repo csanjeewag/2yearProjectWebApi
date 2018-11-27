@@ -12,8 +12,7 @@ using EMS.Data.ViewModels;
 
 namespace EMS.Service 
 {
-    // [Produces("application/json")]
-  //  [Route("api/Employee")]
+    
     public class EmployeeServices
     {
         private readonly EMS.Data.EmployeeRepository  _service; 
@@ -40,16 +39,7 @@ namespace EMS.Service
 
         }
 
-        public Department GetDepartmentById(string id)
-        {
-            return _service.GetDepartmentById(id);
-
-        }
-        public Position GetPositionById(string id)
-        {
-            return _service.GetPositionById(id);
-
-        }
+        
         public Employee GetEmployeeByEmail(string email)
         {
 
@@ -62,15 +52,8 @@ namespace EMS.Service
         {
             return _service.AddEmployee(emp);
         }
-        public Boolean AddDepartment(Department dprt)
-        {
-            return _service.AddDepartment(dprt);
-        }
-
-        public Boolean AddPosition(Position pos)
-        {
-            return _service.AddPosition(pos);
-        }
+       
+       
 
         public Boolean UpdateEmployee(Employee emp)
         {
@@ -80,21 +63,15 @@ namespace EMS.Service
             return _service.UpdateEmployee(emp);
         }
 
-        public Boolean UpdateRole(GetUpdateRole role)
-        {
-           return _service.UpdateRole(role);
-        }
+       
 
-        public Boolean UpdateDepartment(Department dprt)
-        {
-            return _service.UpdateDepartment(dprt);
-        }
+        
 
-        public Boolean UpdatePosition(Position role)
+
+        public Boolean UpdatePosition(GetUpdatePosition role)
         {
             return _service.UpdatePosition(role);
         }
-
 
 
         public Boolean LoginId(LoginId log)
@@ -110,29 +87,22 @@ namespace EMS.Service
 
         }
 
-        public IEnumerable<GetEmployeesDetails> GetEmployeesDetails()
+        public IEnumerable<ViewEmployee> GetEmployeesDetails()
         {
            
 
             return _service.GetEmployeesDetails();
         }
 
-        public GetEmployeesDetails GetEmployeeDetails(string id)
+        public ViewEmployee GetEmployeeDetails(string id)
         {
 
 
             return _service.GetEmployeeDetails(id);
         }
 
-        public IEnumerable<Department> GetDepartments()
-        {
-            return _service.GetDepartments();
-        }
-
-        public IEnumerable<Position> GetRoles()
-        {
-            return _service.GetRoles();
-        }
+        
+      
 
         public Boolean IsEmailUnique(GetEmail email)
         {
@@ -158,6 +128,8 @@ namespace EMS.Service
         {
             return _service.SetEmailAndPassword(getEP);
         }
+
+    
     }
 
 }

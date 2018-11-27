@@ -11,9 +11,10 @@ using System;
 namespace EMS.Data.Migrations
 {
     [DbContext(typeof(EMSContext))]
-    partial class EMSContextModelSnapshot : ModelSnapshot
+    [Migration("20181127133309_addIDtoEmployee")]
+    partial class addIDtoEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,8 +134,6 @@ namespace EMS.Data.Migrations
                     b.Property<string>("EmpProfilePicture");
 
                     b.Property<bool>("IsActive");
-
-                    b.Property<DateTime?>("LastUpdate");
 
                     b.Property<string>("PositionId");
 
