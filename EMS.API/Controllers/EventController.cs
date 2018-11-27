@@ -47,5 +47,32 @@ namespace EMS.API.Controllers
             }
             
         }
+        [HttpPost("addcricketteam")]
+        public IActionResult AddCricketTeam([FromForm]CricketTeam team)
+        {
+            var test = _service.AddCricketTeam(team);
+            if (test)
+            {
+                return Ok("success");
+            }
+            else
+            {
+                return BadRequest("error");
+            }
+        }
+
+        [HttpGet("getcricketteams")]
+        public IActionResult GetCricketTeams()
+        { 
+            try
+            {
+                var test = _service.GetCricketTeams();
+                return Ok(test);
+            }
+            catch
+            {
+                return BadRequest("error");
+            }
+        }
     }
 }

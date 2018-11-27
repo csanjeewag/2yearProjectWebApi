@@ -80,6 +80,11 @@ namespace EMS.Service
             return _service.UpdateEmployee(emp);
         }
 
+        public Boolean UpdateRole(GetUpdateRole role)
+        {
+           return _service.UpdateRole(role);
+        }
+
         public Boolean UpdateDepartment(Department dprt)
         {
             return _service.UpdateDepartment(dprt);

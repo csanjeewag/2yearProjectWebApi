@@ -25,5 +25,15 @@ namespace EMS.Service
         {
             return _service.GetFrontPage(id);
         }
+
+        public Boolean AddCricketTeam(CricketTeam team)
+        {
+            return _service.AddCricketTeam(team);
+        }
+
+        public List<CricketTeam> GetCricketTeams()
+        {
+            return _service.GetCricketTeams();
+        }
     }
 }

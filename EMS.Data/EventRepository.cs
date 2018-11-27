@@ -33,5 +33,25 @@ namespace EMS.Data
             var test = _context.FrontPages.Where(c => c.CriEventId == id).FirstOrDefault();
             return test;
         }
+
+        public Boolean AddCricketTeam(CricketTeam team)
+        {
+            try
+            {
+                _context.CricketTeams.Add(team);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        
+        public List<CricketTeam> GetCricketTeams()
+        {
+            var test = _context.CricketTeams.ToList();
+            return test;
+        }
     }
 }

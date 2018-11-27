@@ -155,6 +155,22 @@ namespace EMS.Data
                 return false;
             }
         }
+        public Boolean UpdateRole(GetUpdateRole role)
+        {
+            
+            try
+            {
+                var employee = _context.Employees.Where(c => c.EmpEmail == role.Email).FirstOrDefault();
+                employee.PositionPId = role.RoleId;
+                _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public Boolean UpdateDepartment(Department dprt)
         {

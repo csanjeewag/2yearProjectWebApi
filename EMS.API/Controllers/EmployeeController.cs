@@ -267,6 +267,22 @@ namespace EMS.API.Controllers
             }
         }
 
+        [Consumes("application/json")]
+        [HttpPost("updaterole")]
+        public IActionResult UpdateRole([FromForm]GetUpdateRole role)
+        {
+            
+            if (_service.UpdateRole(role))
+            {
+
+                return Ok(role);
+            }
+            else
+            {
+                return BadRequest("there error");
+            }
+        }
+
         [Produces("application/json")]
         [Consumes("application/json")]
         [HttpPost("updatedepartment")]
