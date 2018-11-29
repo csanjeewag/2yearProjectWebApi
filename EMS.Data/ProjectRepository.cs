@@ -14,24 +14,12 @@ namespace EMS.Data
             _context = context;
         }
 
-
-        public Department GetDepartmentById(string id)
-        {
-
-            var corses = _context.Departments
-                .Where(c => c.DprtId == id).FirstOrDefault();
-
-            return corses;
-
-        }
-        
-
-
-        public Boolean AddDepartment(Department dprt)
+        public Boolean AddProject(Project project)
         {
             try
             {
-                _context.Departments.Add(dprt);
+                project.IsActive = true;
+                _context.Projects.Add(project);
                 _context.SaveChanges();
 
                 return true;
@@ -42,11 +30,12 @@ namespace EMS.Data
             }
         }
 
-        public Boolean UpdateDepartment(Department dprt)
+        public Boolean UpdateProject(Project project)
         {
             try
             {
-                _context.Entry(dprt).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                project.IsActive = true;
+                _context.Entry(project).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
                 return true;
             }
@@ -56,12 +45,47 @@ namespace EMS.Data
             }
         }
 
-
-        public IEnumerable<Department> GetDepartments()
+        public List<Project> GetProject()
         {
-            var departments = _context.Departments
+            var projects = _context.Projects
                .ToList();
-            return departments;
+            return projects;
+        }
+
+        public Project GetProject(string id)
+        {
+            var projects = _context.Projects.Where(c=> c.IsActive==true && c.ProjectId == id)
+               .FirstOrDefault();
+            return projects;
+        }
+
+        public Boolean DeActive (string id)
+        {
+           
+            try {
+                var project = _context.Projects.Where(c => c.IsActive == true && c.ProjectId == id)
+                .FirstOrDefault();
+                project.IsActive = false;
+                _context.Entry(project).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public Boolean Active(string id)
+        {
+
+            try
+            {
+                var project = _context.Projects.Where(c => c.IsActive == false && c.ProjectId == id)
+                .FirstOrDefault();
+                project.IsActive = true;
+                _context.Entry(project).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
         }
 
 

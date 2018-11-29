@@ -31,6 +31,12 @@ namespace EMS.API.Controllers
             _service = new EmployeeServices(_context);
         }
 
+
+        /// <summary>
+        /// upload employee details
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns> return 200 if upload success else return 404</returns>
         [Produces("application/json")]
         [Consumes("application/json")]
         [HttpPost("upload")]
@@ -50,33 +56,11 @@ namespace EMS.API.Controllers
             }
         }
 
-        [Produces("application/json")]
-        [HttpGet("test")]
-        public IEnumerable<Test> FindAl()
-        {
-            string id = "1";
-            var test = _context.Employees
-                //.Where(c => c.EmpId == id)
-                .Join(_context.Departments,
-                e => e.DepartmentDprtId, d => d.DprtId, (e, d) =>
-                   new { e, d })
-                .Join(_context.Positions,
-                    e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                         => new Test { EmpName = e2.e.EmpName }).ToList()
-
-
-                   ;
-            //.Where(c => c.EmpId == id)
-            //.Select(c => c.EmpId)
-            //.FirstOrDefault(); 
-            //if (String.IsNullOrEmpty(id))
-
-
-            return test;
-
-
-        }
-
+        
+        /// <summary>
+        /// get employee details 
+        /// </summary>
+        /// <returns></returns>
         [Produces("application/json")]
         [HttpGet("")]
         //  [Authorize(Roles = "Administrator")]
@@ -86,6 +70,10 @@ namespace EMS.API.Controllers
 
         }
 
+        /// <summary>
+        /// get all employee details
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [Produces("application/json")]
         [HttpGet("getall")]
@@ -99,6 +87,11 @@ namespace EMS.API.Controllers
 
         }
 
+        /// <summary>
+        /// get employee from id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Produces("application/json")]
         [HttpGet("getall/{id}")]
         public IActionResult GetEmployeeDetails(string id)
@@ -111,6 +104,11 @@ namespace EMS.API.Controllers
 
         }
 
+        /// <summary>
+        /// get employee from id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Produces("application/json")]
         [HttpGet("{id}")]
 
@@ -120,7 +118,11 @@ namespace EMS.API.Controllers
 
         }
 
-   
+        /// <summary>
+        /// get employee from email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [Produces("application/json")]
         [HttpGet("email/{id}")]
 
@@ -130,7 +132,11 @@ namespace EMS.API.Controllers
 
         }
 
-      
+      /// <summary>
+      /// add new employee 
+      /// </summary>
+      /// <param name="emp"></param>
+      /// <returns></returns>
         [HttpPost("create")]
         public IActionResult Create([FromForm]GetEmployee emp)
         {
@@ -139,6 +145,7 @@ namespace EMS.API.Controllers
                 string res = "";
                 if (emp.EmpProfilePicture != null)
                 {
+                    // add profile picture 
                     res = AddFiles.AddImage(emp.EmpProfilePicture, emp.EmpId);
 
                 }
@@ -156,14 +163,14 @@ namespace EMS.API.Controllers
                 employee.DepartmentDprtId = emp.DepartmentDprtId;
                 employee.EmpProfilePicture = res;
 
-                int logincode = _service.AddEmployee(employee);
+                int regitercode = _service.AddEmployee(employee);
 
 
-                if (logincode > 0)
+                if (regitercode > 0)
                 {
 
-
-                    Boolean SendCode = SendMail.SendloginCode(logincode.ToString(), emp.EmpEmail, emp.EmpName);
+                    // if there register code send it bt email
+                    Boolean SendCode = SendMail.SendloginCode(regitercode.ToString(), emp.EmpEmail, emp.EmpName);
 
                     return Ok(emp);
                 }
@@ -181,14 +188,18 @@ namespace EMS.API.Controllers
       
 
 
-        //[Produces("application/json")]
-        //[Consumes("application/json")]
+        /// <summary>
+        /// update employee details
+        /// </summary>
+        /// <param name="emp"></param>
+        /// <returns></returns>
         [HttpPost("updateemployee")]
         public IActionResult UpdateEmployee([FromForm]GetEmployee emp)
         {
             string res = "";
             if (emp.EmpProfilePicture != null)
             {
+                // if there profile picture change it
                 res = AddFiles.AddImage(emp.EmpProfilePicture, emp.EmpId);
 
             }
@@ -219,6 +230,12 @@ namespace EMS.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// update employee position using email
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         [Consumes("application/json")]
         [HttpPost("updaterole")]
         public IActionResult UpdatePosition([FromForm]GetUpdatePosition position)
@@ -236,7 +253,11 @@ namespace EMS.API.Controllers
         }
 
      
-      
+      /// <summary>
+      /// login employee
+      /// </summary>
+      /// <param name="logins"></param>
+      /// <returns> if logged return 200 else 404</returns>
         [Produces("application/json")]
         [Consumes("application/json")]
         [HttpPost("login")]

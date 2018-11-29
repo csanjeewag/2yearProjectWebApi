@@ -26,6 +26,8 @@ namespace EMS.Data.Models
         public DbSet<EventImages> EventImages { get; set; }
         public DbSet<FrontPage> FrontPages { get; set; }
         public DbSet<CricketTeam> CricketTeams { get; set; }
+        public DbSet<Project>  Projects { get; set; }
       
     }
 }
+ 

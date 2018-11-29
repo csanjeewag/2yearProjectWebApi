@@ -22,63 +22,75 @@ namespace EMS.API.Controllers
             _service = new ProjectService(_context);
         }
 
-        [Produces("application/json")]
-        [HttpGet("getdepartment/{id}")]
 
-        public Department GetDepartmentId(string id)
+
+       
+        [HttpPost("createproject")]
+        public IActionResult CreateProject([FromForm]Project project)
         {
-            return _service.GetDepartmentById(id);
 
+            if (_service.AddProject(project))
+            {
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("there error");
+            }
+        }
+
+
+       
+        [HttpPost("updateproject")]
+        public IActionResult UpdateProject([FromForm]Project project)
+        {
+
+            if (_service.UpdateProject(project))
+            {
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("there error");
+            }
         }
 
         
-
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("createdepartment")]
-        public IActionResult CreateDepartment([FromBody]Department dprt)
+        [HttpGet("getprojects")]
+        public IActionResult GetProject()
         {
 
-            if (_service.AddDepartment(dprt))
-            {
+            var res = _service.GetProject();
 
-                return Ok(dprt);
-            }
-            else
-            {
-                return BadRequest("there error");
-            }
+            try { return Ok(res); } catch { return BadRequest("error get project!"); }
         }
 
-
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("updatedepartment")]
-        public IActionResult UpdateDepartment([FromBody]Department dprt)
+        [HttpGet("getproject/{id}")]
+        public IActionResult GetProject(string id)
         {
 
-            if (_service.UpdateDepartment(dprt))
-            {
+            var res = _service.GetProject(id);
 
-                return Ok(dprt);
-            }
-            else
-            {
-                return BadRequest("there error");
-            }
+            try { return Ok(res); } catch { return BadRequest("error get project!"); }
         }
 
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpGet("getdepartments")]
-        public IActionResult GetDepartments()
+        [HttpGet("deactiveproject/{id}")]
+        public IActionResult DeActive(string id)
         {
-
-            var res = _service.GetDepartments();
-
-            try { return Ok(res); } catch { return BadRequest("error get departments!"); }
+            var result= _service.DeActive(id);
+            if (result) { return Ok(); }
+            else { return BadRequest(); }
         }
 
+        [HttpGet("activeproject/{id}")]
+        public IActionResult Active(string id)
+        {
+            var result = _service.Active(id);
+            if (result) { return Ok(); }
+            else { return BadRequest(); }
+        }
     }
 
 

@@ -15,7 +15,10 @@ namespace EMS.Data
             _context = context;
         }
 
-        //return all employees in employee table.
+        /// <summary>
+        /// return all employees in employee table.
+        /// </summary>
+        /// <returns>Empoyee list</returns>
         public IEnumerable<Employee> GetAll()
         {
 
@@ -26,7 +29,11 @@ namespace EMS.Data
 
         }
 
-        //return one employee acroding to employee id
+        /// <summary>
+        /// return one employee acroding to employee id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Employee</returns>
         public Employee GetEmployeeById(string id)
         {
 
@@ -40,7 +47,11 @@ namespace EMS.Data
 
         }
 
-        //add a employee to employee table
+        /// <summary>
+        /// add a employee to employee table
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns>return register code</returns>
         public int AddEmployee(Employee employee)
         {
             GetEmail checkemail = new GetEmail();
@@ -74,7 +85,11 @@ namespace EMS.Data
             }
         }
 
-        //return boolean value after update employee
+        /// <summary>
+        /// return boolean value after update employee
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns>boolean</returns>
         public Boolean UpdateEmployee(Employee employee)
         {
 
@@ -120,7 +135,11 @@ namespace EMS.Data
             return employees;
         }
 
-        //return employee details for id without such as password 
+        /// <summary>
+        /// return employee details for id without such as password 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> View Employee modal</returns>
         public ViewEmployee GetEmployeeDetails(string id)
         {
             var employee = _context.Employees
@@ -139,8 +158,12 @@ namespace EMS.Data
             return employee;
         }
 
-    
-        //deactive employee 
+
+        /// <summary>
+        /// deactive employee 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> boolean</returns>
         public Boolean RemoveEmployee(string id)
         {
             try
@@ -163,7 +186,11 @@ namespace EMS.Data
 
         }
 
-        //return employee by email
+        /// <summary>
+        /// return employee by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns> Employee</returns>
         public Employee GetEmployeeByEmail(string email)
         {
 
@@ -172,7 +199,11 @@ namespace EMS.Data
             return corses;
 
         }
-        //update position of employee
+        /// <summary>
+        /// update position of employee
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns>boolean</returns>
         public Boolean UpdatePosition(GetUpdatePosition position)
         {
 
@@ -192,7 +223,11 @@ namespace EMS.Data
             }
         }
 
-        //check whether employee can login or not
+        /// <summary>
+        ///check whether employee can login or not
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns> true if login sucsess</returns>
         public Boolean LoginId(LoginId log)
         {
             var data = _context.Employees
@@ -212,7 +247,11 @@ namespace EMS.Data
 
         }
 
-        //check the email in the database
+        /// <summary>
+        /// check the email in the database
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns> true if email in table</returns>
         public Boolean IsEmailUnique(GetEmail email)
         {
             var data = _context.Employees
@@ -231,7 +270,11 @@ namespace EMS.Data
 
         }
 
-        // login by email
+        /// <summary>
+        ///  login by email
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns>if login success return true</returns>
         public Boolean LoginEmail(LoginEmail log)
         {
             GetEmail getEmail = new GetEmail();
@@ -258,7 +301,11 @@ namespace EMS.Data
 
         }
 
-        //if forgot password genarate new register code
+        /// <summary>
+        /// if forgot password genarate new register code
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns> register code</returns>
         public int ForgetPassword(string email)
         {
             try
@@ -288,7 +335,11 @@ namespace EMS.Data
 
         }
 
-        //after forgot password update employee new password
+        /// <summary>
+        /// after forgot password update employee new password
+        /// </summary>
+        /// <param name="getEP"></param>
+        /// <returns> if success return true</returns>
         public Boolean SetEmailAndPassword(GetEmailPassword getEP)
         {
             GetEmail getEmail = new GetEmail();
@@ -312,7 +363,11 @@ namespace EMS.Data
             return false;
         }
 
-        // register employee using regiter code
+        /// <summary>
+        /// register employee using regiter code
+        /// </summary>
+        /// <param name="reg"></param>
+        /// <returns> if success return true</returns>
         public Boolean RegisterEmployee(RegisterActive reg)
         {
             try

@@ -16,26 +16,35 @@ namespace EMS.Service
             _service = new EMS.Data.ProjectRepository(_context);
         }
 
-        public IEnumerable<Department> GetDepartments()
+        public List<Project> GetProject()
         {
-            return _service.GetDepartments();
+            return _service.GetProject();
         }
 
-        public Boolean UpdateDepartment(Department dprt)
+        public Boolean UpdateProject(Project project)
         {
-            return _service.UpdateDepartment(dprt);
+            return _service.UpdateProject(project);
         }
 
-        public Boolean AddDepartment(Department dprt)
+        public Boolean AddProject(Project project)
         {
-            return _service.AddDepartment(dprt);
+            return _service.AddProject(project);
         }
 
-        public Department GetDepartmentById(string id)
+        public Project GetProject(string id)
         {
-            return _service.GetDepartmentById(id);
-
+            return _service.GetProject(id);
         }
-       
+
+        public Boolean DeActive(string id)
+        {
+            return _service.DeActive(id);
+        }
+
+        public Boolean Active(string id)
+        {
+            return _service.Active(id);
+        }
+
     }
 }
