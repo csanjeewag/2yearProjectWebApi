@@ -11,9 +11,10 @@ using System;
 namespace EMS.Data.Migrations
 {
     [DbContext(typeof(EMSContext))]
-    partial class EMSContextModelSnapshot : ModelSnapshot
+    [Migration("20181129071807_addupdatetohost")]
+    partial class addupdatetohost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,34 +154,6 @@ namespace EMS.Data.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("EMS.Data.Models.Event", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ClosingDate");
-
-                    b.Property<string>("Destination");
-
-                    b.Property<DateTime>("EndDate");
-
-                    b.Property<string>("EventDescription");
-
-                    b.Property<string>("EventTitle");
-
-                    b.Property<string>("PKey");
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<string>("Type");
-
-                    b.Property<string>("Url");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Events");
-                });
-
             modelBuilder.Entity("EMS.Data.Models.EventImages", b =>
                 {
                     b.Property<string>("ImageId")
@@ -229,24 +202,6 @@ namespace EMS.Data.Migrations
                     b.ToTable("FrontPages");
                 });
 
-            modelBuilder.Entity("EMS.Data.Models.OneDayTripRegistrant", b =>
-                {
-                    b.Property<string>("PKey")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("EmployeeId");
-
-                    b.Property<string>("EventId");
-
-                    b.Property<string>("NumberOfFamilyMembers");
-
-                    b.Property<string>("TransportationMode");
-
-                    b.HasKey("PKey");
-
-                    b.ToTable("OneDayTripRegistrants");
-                });
-
             modelBuilder.Entity("EMS.Data.Models.Position", b =>
                 {
                     b.Property<string>("PositionId")
@@ -289,32 +244,6 @@ namespace EMS.Data.Migrations
                     b.HasKey("EmpName");
 
                     b.ToTable("Tests");
-                });
-
-            modelBuilder.Entity("EMS.Data.Models.TwoDayTripRegistrants", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Accomadation");
-
-                    b.Property<string>("EmployeeId");
-
-                    b.Property<string>("EventId");
-
-                    b.Property<string>("MealTypeNonVegi");
-
-                    b.Property<string>("MealTypeVegi");
-
-                    b.Property<string>("NumberOfFamilyMembers");
-
-                    b.Property<string>("PKey");
-
-                    b.Property<string>("TransportationMode");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TwoDayTripRegistrant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

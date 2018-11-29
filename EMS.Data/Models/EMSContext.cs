@@ -27,7 +27,11 @@ namespace EMS.Data.Models
         public DbSet<FrontPage> FrontPages { get; set; }
         public DbSet<CricketTeam> CricketTeams { get; set; }
         public DbSet<Project>  Projects { get; set; }
-      
+
+        public DbSet<Event> Events { get; set; }
+        public DbSet<OneDayTripRegistrant> OneDayTripRegistrants { get; set; }
+        public DbSet<TwoDayTripRegistrants> TwoDayTripRegistrant { get; set; }
+
     }
 }
  

@@ -14,6 +14,11 @@ namespace EMS.Data
             _context = context;
         }
 
+        /// <summary>
+        /// add a new project
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns> return true if success</returns>
         public Boolean AddProject(Project project)
         {
             try
@@ -29,7 +34,11 @@ namespace EMS.Data
                 return false;
             }
         }
-
+        /// <summary>
+        /// update project details
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         public Boolean UpdateProject(Project project)
         {
             try
@@ -44,21 +53,32 @@ namespace EMS.Data
                 return false;
             }
         }
-
+        /// <summary>
+        /// get all projet from table
+        /// </summary>
+        /// <returns></returns>
         public List<Project> GetProject()
         {
             var projects = _context.Projects
                .ToList();
             return projects;
         }
-
+        /// <summary>
+        /// get project from project id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Project GetProject(string id)
         {
             var projects = _context.Projects.Where(c=> c.IsActive==true && c.ProjectId == id)
                .FirstOrDefault();
             return projects;
         }
-
+        /// <summary>
+        /// deactive project from project id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Boolean DeActive (string id)
         {
            
@@ -72,7 +92,11 @@ namespace EMS.Data
             }
             catch { return false; }
         }
-
+        /// <summary>
+        /// active project from project id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Boolean Active(string id)
         {
 
