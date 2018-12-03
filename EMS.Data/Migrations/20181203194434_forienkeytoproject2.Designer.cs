@@ -11,9 +11,10 @@ using System;
 namespace EMS.Data.Migrations
 {
     [DbContext(typeof(EMSContext))]
-    partial class EMSContextModelSnapshot : ModelSnapshot
+    [Migration("20181203194434_forienkeytoproject2")]
+    partial class forienkeytoproject2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +141,9 @@ namespace EMS.Data.Migrations
 
                     b.Property<string>("PositionPId");
 
-                    b.Property<int>("ProjectPrId");
+                    b.Property<int?>("ProjectPrId");
+
+                    b.Property<int>("ProjectProjectId");
 
                     b.Property<string>("RegisterCode");
 
@@ -441,8 +444,7 @@ namespace EMS.Data.Migrations
 
                     b.HasOne("EMS.Data.Models.Project")
                         .WithMany("employees")
-                        .HasForeignKey("ProjectPrId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectPrId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

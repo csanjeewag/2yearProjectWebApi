@@ -20,5 +20,6 @@ namespace EMS.Data.ViewModels
         public string EmpDepartment{ get; set; } 
         public string EmpProfilePicture { get; set; }
         public DateTime EmpStartDate { get; set; }
+        public string  ProjectName { get; set; } 
     }
 }

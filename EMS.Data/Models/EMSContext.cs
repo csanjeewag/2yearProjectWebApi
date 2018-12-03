@@ -32,6 +32,15 @@ namespace EMS.Data.Models
         public DbSet<OneDayTripRegistrant> OneDayTripRegistrants { get; set; }
         public DbSet<TwoDayTripRegistrants> TwoDayTripRegistrant { get; set; }
 
+
+       /* protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Employee>()
+                .HasOne(p => p.Project)
+                .WithMany(b => b.employees)
+                .HasForeignKey(p => p.ProjectId)
+                .HasConstraintName("ForeignKey_Project_Employee");
+        }*/
     }
 }
  

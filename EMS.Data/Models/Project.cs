@@ -10,11 +10,16 @@ namespace EMS.Data.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int PrId { get; set; }
         public string ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string ProjectDescription { get; set; }
         public Boolean IsActive { get; set; }
+        public IEnumerable<Employee> employees { get; set; }
+
+
+
+        
 
     }
 }

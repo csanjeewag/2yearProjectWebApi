@@ -32,6 +32,8 @@ namespace EMS.Data.Models
         public Boolean IsActive { get; set; }
         public string RegisterCode { get; set; }
         public string EmpProfilePicture { get; set; }
+        [ForeignKey("Project")]
+        public int ProjectPrId { get; set; }
         
 
     }

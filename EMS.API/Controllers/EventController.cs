@@ -128,7 +128,7 @@ namespace EMS.API.Controllers
             var test = _service.AddCricketTeam(team);
             if (test)
             {
-                return Ok("success");
+                return Ok(test);
             }
             else
             {
@@ -150,7 +150,7 @@ namespace EMS.API.Controllers
             }
         }
 
-        [HttpGet("getcricketteam/{{id}}")]
+        [HttpGet("getcricketteam/{id}")]
         public IActionResult GetCricketTeams(string id)
         {
            

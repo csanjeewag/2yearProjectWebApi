@@ -327,15 +327,16 @@ namespace EMS.API.Controllers
         [Produces("application/json")]
         [Consumes("application/json")]
         [HttpPost("isuniqueemail")]
-        public Boolean IsEmailUnique([FromBody]GetEmail email)
+        public IActionResult IsEmailUnique([FromBody]GetEmail email)
         {
             try
             {
-                return _service.IsEmailUnique(email);
+                var employee = _service.IsEmailUnique(email);
+                return Ok(employee);
             }
             catch
             {
-                return false;
+                return BadRequest();
             }
         }
 

@@ -11,9 +11,10 @@ using System;
 namespace EMS.Data.Migrations
 {
     [DbContext(typeof(EMSContext))]
-    partial class EMSContextModelSnapshot : ModelSnapshot
+    [Migration("20181203183515_forienkeytoproject1")]
+    partial class forienkeytoproject1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +141,9 @@ namespace EMS.Data.Migrations
 
                     b.Property<string>("PositionPId");
 
-                    b.Property<int>("ProjectPrId");
+                    b.Property<int?>("ProjectId");
+
+                    b.Property<int>("ProjectProjectId");
 
                     b.Property<string>("RegisterCode");
 
@@ -152,7 +155,7 @@ namespace EMS.Data.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.HasIndex("ProjectPrId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Employees");
                 });
@@ -267,7 +270,7 @@ namespace EMS.Data.Migrations
 
             modelBuilder.Entity("EMS.Data.Models.Project", b =>
                 {
-                    b.Property<int>("PrId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("IsActive");
@@ -278,7 +281,7 @@ namespace EMS.Data.Migrations
 
                     b.Property<string>("ProjectName");
 
-                    b.HasKey("PrId");
+                    b.HasKey("Id");
 
                     b.ToTable("Projects");
                 });
@@ -441,8 +444,7 @@ namespace EMS.Data.Migrations
 
                     b.HasOne("EMS.Data.Models.Project")
                         .WithMany("employees")
-                        .HasForeignKey("ProjectPrId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -104,7 +104,7 @@ namespace EMS.Service
         
       
 
-        public Boolean IsEmailUnique(GetEmail email)
+        public ViewEmployee IsEmailUnique(GetEmail email)
         {
             return _service.IsEmailUnique(email);
         }

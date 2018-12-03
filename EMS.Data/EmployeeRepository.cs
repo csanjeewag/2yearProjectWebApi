@@ -59,7 +59,7 @@ namespace EMS.Data
 
             try
             {
-                if (this.IsEmailUnique(checkemail) == false)
+                if (this.IsEmail(checkemail) == false)
                 {
                     //create a random number for register employee
                     Random rand = new Random((int)DateTime.Now.Ticks);
@@ -114,11 +114,11 @@ namespace EMS.Data
                 return false;
             }
         }
-
+ 
         //return all employees detils acroding to viewemployee interface
         public IEnumerable<ViewEmployee> GetEmployeesDetails()
         {
-            var employees = _context.Employees
+            var employee = _context.Employees
                 .Where(c => c.IsActive == true)
                .Join(_context.Departments,
                // join department table
@@ -127,10 +127,32 @@ namespace EMS.Data
                .Join(_context.Positions,
                    // join position table
                    e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                        => new ViewEmployee { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate = e2.e.StartDate })
+                        => new ViewEmployee { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate = e2.e.StartDate, EmpProfilePicture = e2.e.EmpProfilePicture })
                         .ToList();
 
-                  
+            var employees = (from em in _context.Employees
+                            join de in _context.Departments on em.DepartmentDprtId equals de.DprtId
+                            join po in _context.Positions on em.PositionPId equals po.PositionId
+                            join pr in _context.Projects on em.ProjectPrId equals pr.PrId
+                            where em.IsActive == true
+                            select new ViewEmployee
+                            {
+                                EmpId = em.EmpId,
+                                EmpName = em.EmpName,
+                                EmpContact = em.EmpContact,
+                                EmpAddress1 = em.EmpAddress1,
+                                EmpAddress2 = em.EmpAddress2,
+                                EmpGender = em.EmpGender,
+                                EmpPosition = po.PositionName,
+                                EmpDepartment = de.DprtName,
+                                EmpEmail = em.EmpEmail,
+                                EmpStartDate = em.StartDate,
+                                EmpProfilePicture = em.EmpProfilePicture,
+                                ProjectName = pr.ProjectName
+
+                            }).ToList();
+
+
 
             return employees;
         }
@@ -142,7 +164,7 @@ namespace EMS.Data
         /// <returns> View Employee modal</returns>
         public ViewEmployee GetEmployeeDetails(string id)
         {
-            var employee = _context.Employees
+            var employees = _context.Employees
                 .Where(c => c.IsActive == true)
                 .Where(c => c.EmpId == id)
                .Join(_context.Departments,
@@ -153,7 +175,30 @@ namespace EMS.Data
                         => new ViewEmployee { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate = e2.e.StartDate, EmpProfilePicture = e2.e.EmpProfilePicture })
                         .FirstOrDefault();
 
-                  
+            var employee = (from em in _context.Employees
+                       join de in _context.Departments on em.DepartmentDprtId equals de.DprtId
+                       join po in _context.Positions on em.PositionPId equals po.PositionId
+                       join pr in _context.Projects on em.ProjectPrId equals pr.PrId
+                       where(em.IsActive == true && em.EmpId== id)
+                       select new ViewEmployee
+                       {
+                           EmpId = em.EmpId,
+                           EmpName = em.EmpName,
+                           EmpContact = em.EmpContact,
+                           EmpAddress1 = em.EmpAddress1,
+                           EmpAddress2 = em.EmpAddress2,
+                           EmpGender = em.EmpGender,
+                           EmpPosition = po.PositionName,
+                           EmpDepartment = de.DprtName,
+                           EmpEmail = em.EmpEmail,
+                           EmpStartDate = em.StartDate,
+                           EmpProfilePicture = em.EmpProfilePicture,
+                           ProjectName = pr.ProjectName
+
+                       }).FirstOrDefault();
+    
+
+
 
             return employee;
         }
@@ -252,13 +297,32 @@ namespace EMS.Data
         /// </summary>
         /// <param name="email"></param>
         /// <returns> true if email in table</returns>
-        public Boolean IsEmailUnique(GetEmail email)
+        public ViewEmployee IsEmailUnique(GetEmail email)
         {
             var data = _context.Employees
                   .Where(c => c.EmpEmail == email.Email)
                   .Select(c => c.IsActive)
                   .FirstOrDefault();
+            var employee = _context.Employees.Where(c => c.EmpEmail == email.Email).Select(c => new ViewEmployee { EmpEmail = c.EmpEmail, EmpName = c.EmpName, EmpProfilePicture = c.EmpProfilePicture }).FirstOrDefault();
 
+            if (data)
+            {
+                return employee;
+            }
+            else
+            {
+                return employee;
+            }
+
+        }
+
+        public Boolean IsEmail(GetEmail email)
+        {
+            var data = _context.Employees
+                  .Where(c => c.EmpEmail == email.Email)
+                  .Select(c => c.IsActive)
+                  .FirstOrDefault();
+          
             if (data)
             {
                 return true;
@@ -270,6 +334,7 @@ namespace EMS.Data
 
         }
 
+
         /// <summary>
         ///  login by email
         /// </summary>
@@ -280,7 +345,7 @@ namespace EMS.Data
             GetEmail getEmail = new GetEmail();
             getEmail.Email = log.EmpEmail;
 
-            if (this.IsEmailUnique(getEmail))
+            if (this.IsEmail(getEmail))
             {
                 var data = _context.Employees
             .Where(c => c.EmpEmail == log.EmpEmail && c.EmpPassword == log.EmpPassword)
@@ -312,7 +377,7 @@ namespace EMS.Data
             {
                 GetEmail getEmail = new GetEmail();
                 getEmail.Email = email;
-                if (this.IsEmailUnique(getEmail) == true)
+                if (this.IsEmail(getEmail) == true)
                 {
                     Random rand = new Random((int)DateTime.Now.Ticks);
                     int regitercode = rand.Next(10000, 99999);
@@ -345,7 +410,7 @@ namespace EMS.Data
             GetEmail getEmail = new GetEmail();
             getEmail.Email = getEP.EmpEmail;
 
-            if (this.IsEmailUnique(getEmail) == true)
+            if (this.IsEmail(getEmail) == true)
             {
                 Random rand = new Random((int)DateTime.Now.Ticks);
                 int numIterations = rand.Next(10000, 99999);
@@ -375,7 +440,7 @@ namespace EMS.Data
                 GetEmail getEmail = new GetEmail();
                 getEmail.Email = reg.RegisterEmpEmail;
 
-                if (this.IsEmailUnique(getEmail) == false)
+                if (this.IsEmail(getEmail) == false)
                 {
                    
 
