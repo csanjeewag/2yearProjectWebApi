@@ -12910,11 +12910,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\softawre project\\WebAPI\\EMS3\\EMS.Data\\EMS.Data.csproj",
+      "projectUniqueName": "D:\\softawre project\\WebAPI\\Project API\\EMS3\\EMS.Data\\EMS.Data.csproj",
       "projectName": "EMS.Data",
-      "projectPath": "D:\\softawre project\\WebAPI\\EMS3\\EMS.Data\\EMS.Data.csproj",
+      "projectPath": "D:\\softawre project\\WebAPI\\Project API\\EMS3\\EMS.Data\\EMS.Data.csproj",
       "packagesPath": "C:\\Users\\Chanaka Sanjeewa\\.nuget\\packages\\",
-      "outputPath": "D:\\softawre project\\WebAPI\\EMS3\\EMS.Data\\obj\\",
+      "outputPath": "D:\\softawre project\\WebAPI\\Project API\\EMS3\\EMS.Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

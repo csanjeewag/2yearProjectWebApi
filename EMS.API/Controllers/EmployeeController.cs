@@ -162,6 +162,7 @@ namespace EMS.API.Controllers
                 employee.PositionPId = emp.PositionPId;
                 employee.DepartmentDprtId = emp.DepartmentDprtId;
                 employee.EmpProfilePicture = res;
+                employee.ProjectPrId = emp.ProjectId;
 
                 int regitercode = _service.AddEmployee(employee);
 
@@ -218,6 +219,7 @@ namespace EMS.API.Controllers
             employee.EmpProfilePicture = res;
             employee.IsActive = emp.IsActive;
             employee.StartDate = emp.StartDate;
+            employee.ProjectPrId = emp.ProjectId;
 
             if (_service.UpdateEmployee(employee))
             {

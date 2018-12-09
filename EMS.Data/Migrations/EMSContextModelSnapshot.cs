@@ -157,6 +157,19 @@ namespace EMS.Data.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("EMS.Data.Models.EmployeeTask", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<int>("TaskId");
+
+                    b.HasKey("Id", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("EmployeeTasks");
+                });
+
             modelBuilder.Entity("EMS.Data.Models.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -281,6 +294,48 @@ namespace EMS.Data.Migrations
                     b.HasKey("PrId");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Task", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddDate");
+
+                    b.Property<float>("BudgetedCost");
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("EventName");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.Property<bool>("Status");
+
+                    b.Property<string>("TaskName");
+
+                    b.HasKey("TaskId");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.TaskInformation", b =>
+                {
+                    b.Property<int>("FileID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FileName");
+
+                    b.Property<int?>("Task");
+
+                    b.HasKey("FileID");
+
+                    b.HasIndex("Task");
+
+                    b.ToTable("TaskInformations");
                 });
 
             modelBuilder.Entity("EMS.Data.Models.Test", b =>
@@ -443,6 +498,26 @@ namespace EMS.Data.Migrations
                         .WithMany("employees")
                         .HasForeignKey("ProjectPrId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.EmployeeTask", b =>
+                {
+                    b.HasOne("EMS.Data.Models.Employee", "Employee")
+                        .WithMany("EmployeeTasks")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EMS.Data.Models.Task", "Task")
+                        .WithMany("EmployeeTasks")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.TaskInformation", b =>
+                {
+                    b.HasOne("EMS.Data.Models.Task", "TaskId")
+                        .WithMany("TaskInformation")
+                        .HasForeignKey("Task");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

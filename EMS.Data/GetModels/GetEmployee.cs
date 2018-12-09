@@ -26,6 +26,7 @@ namespace EMS.Data.GetModels
         public DateTime StartDate { get; set; }
         public Boolean IsActive { get; set; }
         public string RegisterCode { get; set; }
+        public int ProjectId { get; set; }
         public IFormFile EmpProfilePicture { get; set; }
     }
 }

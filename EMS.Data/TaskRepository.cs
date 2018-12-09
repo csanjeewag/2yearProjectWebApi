@@ -3,50 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using EMS.Data.GetModels;
 using EMS.Data.Models;
+using EMS.Data.ViewModels;
+
 
 namespace EMS.Data
 {
-    public class TaskRepository 
+    public class TaskRepository
     {
         private readonly EMSContext _context;
-        public TaskRepository(EMSContext context)  
+        public TaskRepository(EMSContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<Employee> GetAll()
+
+        /// <summary>
+        /// get task by emp id
+        /// </summary>
+        /// <returns>List of tasks assigned to empid=id employee</returns>        
+        public IEnumerable<Task> GetTaskForEmployee(int id)
         {
 
-            var corses = _context.Employees
-                //.Where(c => c.Name.Contains("s"))
-                //.OrderByDescending(c => c.Name)
-                //.ThenBy(c => c.BlogId)
+           
+            var test = _context.EmployeeTasks
+                .Where(et => et.Id == id)
+                .Select(et => et.Task)
                 .ToList();
-            //var employees = _context.Blogs.ToList();
-
-            return corses;
-
+            return test;
         }
+        
 
-        public Employee GetEmp(string id)
-        {
 
-            var corses = _context.Employees
-                .Where(c => c.EmpId == id).FirstOrDefault();
-            //.OrderByDescending(c => c.Name)
-            //.ThenBy(c => c.BlogId)
-
-            //var employees = _context.Blogs.ToList();
-
-            return corses;
-
-        }
-
-        public Boolean AddEmployee(Employee emp)
+        /// <summary>
+        /// Insert a new task
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns>State of adding a task</returns>
+        public Boolean AddTask(Task task)
         {
             try
             {
-                _context.Employees.Add(emp);
+                _context.Tasks.Add(task);
                 _context.SaveChanges();
 
                 return true;
@@ -57,35 +54,80 @@ namespace EMS.Data
             }
         }
 
-
-        public Boolean UpdateEmployee(Employee emp)
+      /// <summary>
+      /// Return task by Task ID
+      /// </summary>
+      /// <param name="id"></param>
+      /// <returns>Task with the id TaskId=id</returns>
+     public Task GetTaskById(int id)
         {
-            try
-            {
-                _context.Entry(emp).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
 
-        public Boolean Login(LoginId log)
-        {
-            var data = _context.Employees
-                  .Where(c => c.EmpId == log.EmpId && c.EmpPassword == log.EmpPassword)
-                  .Select(c => c.EmpId)
+            /* var test = _context.Tasks
+                 .Where( c => c.TaskId==id)
+                 .Join(_context.Employees,
+                 t => t.EmployeeEmpId, e => e.EmpId, (t, e) =>
+
+                    new Task { TaskId = t.TaskId, TaskName = t.TaskName, StartDate = t.StartDate, EndDate = t.EndDate, BudgetedCost = t.BudgetedCost, Description = t.Description, Admin = t.Admin, EventName = t.EventName, EmployeeEmpId = e.EmpName, Status = t.Status })
                   .FirstOrDefault();
-            if (string.IsNullOrEmpty(data))
+             return test;*/
+
+            var test = _context.EmployeeTasks
+                .Where(et => et.TaskId == id)
+                .Select(et => et.Task)
+                .FirstOrDefault();
+            return test;
+          
+        }
+
+        /// <summary>
+        /// Task Update
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        public Boolean UpdateTask(Task task)
+        {
+            try
+            {
+
+                _context.Entry(task).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            catch
             {
                 return false;
             }
-            else
-            {
-                return true;
-            }
+        }
+        public Boolean AddInformation(TaskInformation tinfo)
+         {
+             try
+             {
+                 _context.TaskInformations.Add(tinfo);
+                 _context.SaveChanges();
+
+                 return true;
+             }
+             catch
+             {
+                 return false;
+             }
+         }
+
+
+        public IEnumerable<Task> GetTaskDetails()
+        {
+            var test = _context.Tasks
+             
+              .ToList();
+            return test;
+
+        }
+        public IEnumerable<Employee> GetEmployeesForTask(int id) {
+            var test = _context.EmployeeTasks
+                .Where(et => et.TaskId == id)
+                .Select(et => et.Employee)
+                .ToList();
+            return test;
 
         }
     }

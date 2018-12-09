@@ -34,7 +34,8 @@ namespace EMS.Data.Models
         public string EmpProfilePicture { get; set; }
         [ForeignKey("Project")]
         public int ProjectPrId { get; set; }
-        
+        public virtual ICollection<EmployeeTask> EmployeeTasks { get; set; }
+
 
     }
 }

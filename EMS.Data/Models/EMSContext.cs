@@ -31,16 +31,35 @@ namespace EMS.Data.Models
         public DbSet<Event> Events { get; set; }
         public DbSet<OneDayTripRegistrant> OneDayTripRegistrants { get; set; }
         public DbSet<TwoDayTripRegistrants> TwoDayTripRegistrant { get; set; }
+        public DbSet<Task> Tasks { get; set; }
+
+        public DbSet<TaskInformation> TaskInformations { get; set; }
+        public DbSet<EmployeeTask> EmployeeTasks { get; set; }
 
 
-       /* protected override void OnModelCreating(ModelBuilder modelBuilder)
+        /* protected override void OnModelCreating(ModelBuilder modelBuilder)
+         {
+             modelBuilder.Entity<Employee>()
+                 .HasOne(p => p.Project)
+                 .WithMany(b => b.employees)
+                 .HasForeignKey(p => p.ProjectId)
+                 .HasConstraintName("ForeignKey_Project_Employee");
+         }*/
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Employee>()
-                .HasOne(p => p.Project)
-                .WithMany(b => b.employees)
-                .HasForeignKey(p => p.ProjectId)
-                .HasConstraintName("ForeignKey_Project_Employee");
-        }*/
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<EmployeeTask>()
+                .HasKey(et => new { et.Id, et.TaskId });
+            modelBuilder.Entity<EmployeeTask>()
+                .HasOne(et => et.Employee)
+                .WithMany(e => e.EmployeeTasks)
+                .HasForeignKey(et => et.Id);
+            modelBuilder.Entity<EmployeeTask>()
+                .HasOne(et => et.Task)
+                .WithMany(t => t.EmployeeTasks)
+                .HasForeignKey(et => et.TaskId);
+        }
     }
 }
  

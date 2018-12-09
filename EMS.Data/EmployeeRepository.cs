@@ -95,7 +95,7 @@ namespace EMS.Data
 
             try
             {   //get employees' positionid and profile pic name
-                var employeedetail = _context.Employees.Where(c => c.EmpEmail == employee.EmpEmail).Select(c => new { c.EmpProfilePicture, c.PositionPId, c.RegisterCode }).FirstOrDefault();
+                var employeedetail = _context.Employees.Where(c => c.EmpEmail == employee.EmpEmail).Select(c => new { c.EmpProfilePicture, c.PositionPId, c.RegisterCode, c.Id }).FirstOrDefault();
                 
                 if (employee.PositionPId == null || employee.PositionPId == "")
                 { employee.PositionPId = employeedetail.PositionPId; }
@@ -104,7 +104,7 @@ namespace EMS.Data
                 //if there is not new employee picture leave the previous profile pic name
                 if (employee.EmpProfilePicture == null || employee.EmpProfilePicture == "")
                 { employee.EmpProfilePicture = employeedetail.EmpProfilePicture; }
-
+                employee.Id = employeedetail.Id;
                 _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
                 return true;

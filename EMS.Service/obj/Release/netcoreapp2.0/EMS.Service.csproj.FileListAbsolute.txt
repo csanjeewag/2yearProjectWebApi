@@ -10,3 +10,15 @@ D:\softawre project\WebAPI\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Servic
 D:\softawre project\WebAPI\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.csproj.CopyComplete
 D:\softawre project\WebAPI\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.dll
 D:\softawre project\WebAPI\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.pdb
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\bin\Release\netcoreapp2.0\EMS.Service.deps.json
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\bin\Release\netcoreapp2.0\EMS.Service.dll
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\bin\Release\netcoreapp2.0\EMS.Service.pdb
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\bin\Release\netcoreapp2.0\EMS.Data.dll
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\bin\Release\netcoreapp2.0\EMS.Data.pdb
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.csprojResolveAssemblyReference.cache
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.csproj.CoreCompileInputs.cache
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.AssemblyInfoInputs.cache
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.AssemblyInfo.cs
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.csproj.CopyComplete
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.dll
+D:\softawre project\WebAPI\Project API\EMS3\EMS.Service\obj\Release\netcoreapp2.0\EMS.Service.pdb
