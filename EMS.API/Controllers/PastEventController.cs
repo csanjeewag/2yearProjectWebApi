@@ -28,20 +28,21 @@ namespace EMS.API.Controllers
         {
             try
             {
-                string result = "";
+                var result = new List<String>();
                 if (image.Image != null)
                 {
-                    result = AddFiles.AddImage(image.Image, image.EventId);
+                    result = AddFiles.AddImages(image.Image, image.EventId);
 
                 }
+
                 EventImages eventimage = new EventImages();
-                eventimage.ImageId = result;
+                
                 eventimage.EventId = image.EventId;
                 eventimage.Caption = image.Caption;
                 eventimage.Description = image.Description;
                 eventimage.Author = image.Author;
 
-                var test = _service.AddImage(eventimage);
+                var test = _service.AddImage(eventimage,result);
                 if (test) { return Ok(); }
                 else { return BadRequest(); }
                 
@@ -63,5 +64,31 @@ namespace EMS.API.Controllers
             catch { return BadRequest(); }
             
         }
+
+        [HttpGet("getevents")]
+        public IActionResult GetAllEvent()
+        {
+            
+            try
+            {
+                var text = _service.GetAllEvent();
+                return Ok(text);
+            }
+            catch { return BadRequest(); }
+        }
+
+
+        [HttpGet("getevent/{id}")]
+        public IActionResult GetEvent(int id)
+        {
+
+            try
+            {
+                var text = _service.GetEvent(id);
+                return Ok(text);
+            }
+            catch { return BadRequest(); }
+        }
+
     }
 }

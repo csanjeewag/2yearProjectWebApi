@@ -16,14 +16,24 @@ namespace EMS.Service
             _service = new EMS.Data.PastEventRepository(_context);
         }
 
-        public Boolean AddImage(EventImages image)
+        public Boolean AddImage(EventImages image, List<string> imageNames)
         {
-            return _service.AddImage(image);
+            return _service.AddImage(image, imageNames);
         }
 
         public List<EventImages> GetImages(string eventId)
         {
             return _service.GetImages(eventId);
+        }
+
+        public List<Event> GetAllEvent()
+        {
+            return _service.GetAllEvent();
+        }
+
+        public Event GetEvent(int id)
+        {
+            return _service.GetEvent(id);
         }
 
     }

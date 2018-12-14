@@ -14,15 +14,28 @@ namespace EMS.Data
             _context = context;
         }
 
-        public Boolean AddImage( EventImages image)
+        public Boolean AddImage( EventImages image, List<string> imageNames)
         {
             try
             {
-                DateTime today = DateTime.Today;
-                image.Date = today;
-                image.IsActive = true;
-                var text = _context.Add(image);
-                _context.SaveChanges();
+
+                
+
+                foreach (var imageName in imageNames)
+                {
+
+                    DateTime today = DateTime.Today;
+                    EventImages eventImages = new EventImages();
+                    eventImages.IsActive = true;
+                    eventImages.EventId = image.EventId;
+                    eventImages.ImageId = imageName;
+                    eventImages.Date = image.Date;
+                    eventImages.Description = image.Description;
+                    eventImages.Author = image.Author;
+                    eventImages.Caption = image.Caption;
+                    var text = _context.Add(eventImages);
+                    _context.SaveChanges();
+                }
                 return true;
             }
             catch
@@ -42,6 +55,19 @@ namespace EMS.Data
             {
                 return null;
             }
+        }
+        public List<Event> GetAllEvent()
+        {
+            var events = _context.Events.ToList();
+            return events;
+        }
+
+        public Event GetEvent(int id)
+        {
+            var events = _context.Events
+                .Where(e => e.Id == id)
+                .FirstOrDefault();
+            return events;
         }
 
     }
