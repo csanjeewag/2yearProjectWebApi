@@ -9,6 +9,17 @@
     <Compile Remove="Migrations\20181203182503_forienkeytoproject1.cs" />
     <Compile Remove="Migrations\20181203183018_forienkeytoproject1.cs" />
     <Compile Remove="Migrations\20181203183252_forienkeytoproject1.cs" />
+    <Compile Remove="Migrations\20181213161219_addalltable.cs" />
+    <Compile Remove="Migrations\20181213172411_addeventtype4.cs" />
+    <Compile Remove="Migrations\20181213174641_addeventtype4.cs" />
+    <Compile Remove="Migrations\20181213180442_addeventtype7.cs" />
+    <Compile Remove="Migrations\20181213180856_addeventtype8.cs" />
+    <Compile Remove="Migrations\20181213181038_addeventtype8.cs" />
+    <Compile Remove="Migrations\20181213191159_addeventtype11.cs" />
+    <Compile Remove="Migrations\20181213191956_addeventtype14.cs" />
+    <Compile Remove="Migrations\20181213192056_addeventtype14.cs" />
+    <Compile Remove="Migrations\20181213193516_addnewEvents2.cs" />
+    <Compile Remove="Migrations\20181214050151_changeevent1.cs" />
   </ItemGroup>
 
   <ItemGroup>

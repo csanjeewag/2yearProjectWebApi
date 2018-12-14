@@ -22,10 +22,9 @@ namespace EMS.API.Controllers
             _service = new EventService(_context);
         }
 
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("createEvent")]
-        public IActionResult CreateEvent([FromBody]Event even)
+      
+        [HttpPost("createevent")]
+        public IActionResult CreateEvent([FromForm]Event even)
         {
 
             if (_service.AddEvent(even))

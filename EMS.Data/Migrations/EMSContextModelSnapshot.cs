@@ -175,27 +175,25 @@ namespace EMS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClosingDate");
-
-                    b.Property<string>("Destination");
-
-                    b.Property<DateTime>("EndDate");
+                    b.Property<DateTime>("EventClosingDate");
 
                     b.Property<string>("EventDescription");
 
-                    b.Property<string>("EventTitle");
+                    b.Property<DateTime>("EventEndDate");
 
-                    b.Property<string>("PKey");
+                    b.Property<string>("EventId");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<string>("EventName");
 
-                    b.Property<string>("Type");
+                    b.Property<DateTime>("EventStartDate");
 
-                    b.Property<string>("Url");
+                    b.Property<int>("EventTypeId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events");
+                    b.HasIndex("EventTypeId");
+
+                    b.ToTable("Event");
                 });
 
             modelBuilder.Entity("EMS.Data.Models.EventImages", b =>
@@ -218,6 +216,22 @@ namespace EMS.Data.Migrations
                     b.HasKey("ImageId");
 
                     b.ToTable("EventImages");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Eventtype", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EventTypeDescription");
+
+                    b.Property<string>("EventTypeId");
+
+                    b.Property<string>("EventTypeName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Eventtypes");
                 });
 
             modelBuilder.Entity("EMS.Data.Models.FrontPage", b =>
@@ -510,6 +524,14 @@ namespace EMS.Data.Migrations
                     b.HasOne("EMS.Data.Models.Task", "Task")
                         .WithMany("EmployeeTasks")
                         .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Event", b =>
+                {
+                    b.HasOne("EMS.Data.Models.Eventtype")
+                        .WithMany("Events")
+                        .HasForeignKey("EventTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

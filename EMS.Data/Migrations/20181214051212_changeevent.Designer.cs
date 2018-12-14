@@ -11,8 +11,8 @@ using System;
 namespace EMS.Data.Migrations
 {
     [DbContext(typeof(EMSContext))]
-    [Migration("20181014075803_addTables")]
-    partial class addTables
+    [Migration("20181214051212_changeevent")]
+    partial class changeevent
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,6 +72,30 @@ namespace EMS.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("EMS.Data.Models.CricketTeam", b =>
+                {
+                    b.Property<string>("CriTeamID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CriTeamCaptionContact");
+
+                    b.Property<string>("CriTeamCaptionEmail");
+
+                    b.Property<string>("CriTeamCaptionName");
+
+                    b.Property<string>("CriTeamName");
+
+                    b.Property<string>("CriTeamNonVegitarion");
+
+                    b.Property<string>("CriTeamParticipations");
+
+                    b.Property<string>("CriTeamVegitarion");
+
+                    b.HasKey("CriTeamID");
+
+                    b.ToTable("CricketTeams");
+                });
+
             modelBuilder.Entity("EMS.Data.Models.Department", b =>
                 {
                     b.Property<string>("DprtId")
@@ -86,7 +110,7 @@ namespace EMS.Data.Migrations
 
             modelBuilder.Entity("EMS.Data.Models.Employee", b =>
                 {
-                    b.Property<string>("EmpId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("DepartmentDprtId");
@@ -101,21 +125,160 @@ namespace EMS.Data.Migrations
 
                     b.Property<string>("EmpGender");
 
+                    b.Property<string>("EmpId");
+
                     b.Property<string>("EmpName");
 
                     b.Property<string>("EmpPassword");
+
+                    b.Property<string>("EmpProfilePicture");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTime?>("LastUpdate");
 
                     b.Property<string>("PositionId");
 
                     b.Property<string>("PositionPId");
 
-                    b.HasKey("EmpId");
+                    b.Property<int>("ProjectPrId");
+
+                    b.Property<string>("RegisterCode");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("DepartmentDprtId");
 
                     b.HasIndex("PositionId");
 
+                    b.HasIndex("ProjectPrId");
+
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.EmployeeTask", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<int>("TaskId");
+
+                    b.HasKey("Id", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("EmployeeTasks");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Event", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClosingDate");
+
+                    b.Property<string>("Destination");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("EventDescription");
+
+                    b.Property<string>("EventId");
+
+                    b.Property<string>("EventName");
+
+                    b.Property<int>("EventTypeId");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventTypeId");
+
+                    b.ToTable("Event");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.EventImages", b =>
+                {
+                    b.Property<string>("ImageId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Author");
+
+                    b.Property<string>("Caption");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("EventId");
+
+                    b.Property<bool>("IsActive");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("EventImages");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Eventtype", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EventTypeDescription");
+
+                    b.Property<string>("EventTypeId");
+
+                    b.Property<string>("EventTypeName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Eventtypes");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.FrontPage", b =>
+                {
+                    b.Property<string>("CriEventId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CriEventContent1");
+
+                    b.Property<string>("CriEventContent2");
+
+                    b.Property<DateTime>("CriEventDate");
+
+                    b.Property<DateTime>("CriEventDeadLine");
+
+                    b.Property<string>("CriEventMainTopic");
+
+                    b.Property<string>("CriEventPlace");
+
+                    b.Property<string>("CriEventSubTopic");
+
+                    b.Property<DateTime>("CriEventTime");
+
+                    b.HasKey("CriEventId");
+
+                    b.ToTable("FrontPages");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.OneDayTripRegistrant", b =>
+                {
+                    b.Property<string>("PKey")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EmployeeId");
+
+                    b.Property<string>("EventId");
+
+                    b.Property<string>("NumberOfFamilyMembers");
+
+                    b.Property<string>("TransportationMode");
+
+                    b.HasKey("PKey");
+
+                    b.ToTable("OneDayTripRegistrants");
                 });
 
             modelBuilder.Entity("EMS.Data.Models.Position", b =>
@@ -130,6 +293,104 @@ namespace EMS.Data.Migrations
                     b.HasKey("PositionId");
 
                     b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Project", b =>
+                {
+                    b.Property<int>("PrId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("ProjectDescription");
+
+                    b.Property<string>("ProjectId");
+
+                    b.Property<string>("ProjectName");
+
+                    b.HasKey("PrId");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Task", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddDate");
+
+                    b.Property<float>("BudgetedCost");
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("EventName");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.Property<bool>("Status");
+
+                    b.Property<string>("TaskName");
+
+                    b.HasKey("TaskId");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.TaskInformation", b =>
+                {
+                    b.Property<int>("FileID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FileName");
+
+                    b.Property<int?>("Task");
+
+                    b.HasKey("FileID");
+
+                    b.HasIndex("Task");
+
+                    b.ToTable("TaskInformations");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Test", b =>
+                {
+                    b.Property<string>("EmpName")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("EmpName");
+
+                    b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.TwoDayTripRegistrants", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Accomadation");
+
+                    b.Property<string>("EmployeeId");
+
+                    b.Property<string>("EventId");
+
+                    b.Property<string>("MealTypeNonVegi");
+
+                    b.Property<string>("MealTypeVegi");
+
+                    b.Property<string>("NumberOfFamilyMembers");
+
+                    b.Property<string>("PKey");
+
+                    b.Property<string>("TransportationMode");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TwoDayTripRegistrant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -249,6 +510,39 @@ namespace EMS.Data.Migrations
                     b.HasOne("EMS.Data.Models.Position")
                         .WithMany("Employee")
                         .HasForeignKey("PositionId");
+
+                    b.HasOne("EMS.Data.Models.Project")
+                        .WithMany("employees")
+                        .HasForeignKey("ProjectPrId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.EmployeeTask", b =>
+                {
+                    b.HasOne("EMS.Data.Models.Employee", "Employee")
+                        .WithMany("EmployeeTasks")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EMS.Data.Models.Task", "Task")
+                        .WithMany("EmployeeTasks")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.Event", b =>
+                {
+                    b.HasOne("EMS.Data.Models.Eventtype")
+                        .WithMany("Events")
+                        .HasForeignKey("EventTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.TaskInformation", b =>
+                {
+                    b.HasOne("EMS.Data.Models.Task", "TaskId")
+                        .WithMany("TaskInformation")
+                        .HasForeignKey("Task");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

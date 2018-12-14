@@ -33,7 +33,7 @@ namespace EMS.Data
         {
 
             var eve = _context.Events
-                .Where(c => c.PKey == id).FirstOrDefault();
+                .Where(c => c.EventId == id).FirstOrDefault();
 
             return eve;
 
@@ -79,7 +79,7 @@ namespace EMS.Data
             Console.WriteLine(today);
 
             var even = _context.Events
-                .Where(c => c.StartDate >= today)
+                .Where(c => c.EventStartDate >= today)
                .ToList();
             return even;
         }

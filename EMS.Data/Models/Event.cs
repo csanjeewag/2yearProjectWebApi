@@ -11,15 +11,15 @@ namespace EMS.Data.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string PKey { get; set; }
-        public string Url { get; set; }
-        public string EventTitle { get; set; }
+        public string EventId { get; set; }
+        public string EventName { get; set; }
+
+        [ForeignKey("Eventtype")]
+        public int EventTypeId { get; set; }
         public string EventDescription { get; set; }
-        public string Destination { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string Type { get; set; }
-        public string ClosingDate { get; set; }
+       public DateTime EventStartDate { get; set; }
+        public DateTime EventEndDate { get; set; }
+        public DateTime EventClosingDate { get; set; }
 
 
     }

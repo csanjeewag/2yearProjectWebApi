@@ -29,9 +29,11 @@ namespace EMS.Data.Models
         public DbSet<Project>  Projects { get; set; }
 
         public DbSet<Event> Events { get; set; }
+        public DbSet<Event> EventsDetails { get; set; }
         public DbSet<OneDayTripRegistrant> OneDayTripRegistrants { get; set; }
         public DbSet<TwoDayTripRegistrants> TwoDayTripRegistrant { get; set; }
         public DbSet<Task> Tasks { get; set; }
+        public DbSet<Eventtype> Eventtypes { get; set; }
 
         public DbSet<TaskInformation> TaskInformations { get; set; }
         public DbSet<EmployeeTask> EmployeeTasks { get; set; }
