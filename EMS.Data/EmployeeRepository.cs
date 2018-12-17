@@ -127,14 +127,14 @@ namespace EMS.Data
                .Join(_context.Positions,
                    // join position table
                    e2 => e2.e.PositionPId, p => p.PositionId, (e2, p)
-                        => new ViewEmployee { EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate = e2.e.StartDate, EmpProfilePicture = e2.e.EmpProfilePicture })
+                        => new ViewEmployee {  EmpId = e2.e.EmpId, EmpName = e2.e.EmpName, EmpContact = e2.e.EmpContact, EmpAddress1 = e2.e.EmpAddress1, EmpAddress2 = e2.e.EmpAddress2, EmpGender = e2.e.EmpGender, EmpPosition = p.PositionName, EmpDepartment = e2.d.DprtName, EmpEmail = e2.e.EmpEmail, EmpStartDate = e2.e.StartDate, EmpProfilePicture = e2.e.EmpProfilePicture })
                         .ToList();
 
             var employees = (from em in _context.Employees
                             join de in _context.Departments on em.DepartmentDprtId equals de.DprtId
                             join po in _context.Positions on em.PositionPId equals po.PositionId
                             join pr in _context.Projects on em.ProjectPrId equals pr.PrId
-                            where em.IsActive == true
+                            //where em.IsActive == true
                             select new ViewEmployee
                             {
                                 EmpId = em.EmpId,
@@ -148,7 +148,8 @@ namespace EMS.Data
                                 EmpEmail = em.EmpEmail,
                                 EmpStartDate = em.StartDate,
                                 EmpProfilePicture = em.EmpProfilePicture,
-                                ProjectName = pr.ProjectName
+                                ProjectName = pr.ProjectName,
+                                IsActive = em.IsActive
 
                             }).ToList();
 
@@ -209,27 +210,33 @@ namespace EMS.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns> boolean</returns>
-        public Boolean RemoveEmployee(string id)
+        public Boolean RemoveEmployee(string email,Boolean state)
         {
             try
             {
-                Employee employee = new Employee();
+               // Employee employee = new Employee();
                 Random rand = new Random((int)DateTime.Now.Ticks);
                 int numIterations = rand.Next(10000, 99999);
 
-                employee = this.GetEmployeeById(id);
-                employee.IsActive = false;
+              var  employee = _context.Employees.Where(c => c.EmpEmail == email).FirstOrDefault();
+
+                employee.IsActive = state;
 
                 employee.RegisterCode = numIterations.ToString();
-                this.UpdateEmployee(employee);
+
+                _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
                 return true;
             }
+
             catch
             {
                 return false;
             }
 
         }
+
+
 
         /// <summary>
         /// return employee by email
@@ -249,17 +256,36 @@ namespace EMS.Data
         /// </summary>
         /// <param name="position"></param>
         /// <returns>boolean</returns>
-        public Boolean UpdatePosition(GetUpdatePosition position)
+        public Boolean UpdateEmployeeByPart(GetEmployee emp)
         {
 
             try
-            {
+            {/*
                 // assign employee details
                 var employee = _context.Employees.Where(c => c.EmpEmail == position.Email).FirstOrDefault();
                 //change position
                 employee.PositionPId = position.PositionId;
                 _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges(); */
+                Employee employee = new Employee();
+                employee = _context.Employees.Where(c => c.EmpEmail == emp.EmpEmail).FirstOrDefault();
+                if(emp.PositionPId != null)
+                {
+                    employee.PositionPId = emp.PositionPId;
+                }
+                if (emp.DepartmentDprtId != null)
+                {
+                    employee.DepartmentDprtId = emp.DepartmentDprtId;
+                }
+                if (emp.ProjectId != 0)
+                {
+                    employee.ProjectPrId = emp.ProjectId;
+                }
+                
+
+                _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
+                
                 return true;
             }
             catch
@@ -268,6 +294,20 @@ namespace EMS.Data
             }
         }
 
+        public Boolean UpdateEmployee( GetEmployee emp)
+        {
+            try {
+                Employee employee = new Employee();
+                 employee = _context.Employees.Where(c => c.EmpEmail == emp.EmpEmail).FirstOrDefault();
+
+                _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
         /// <summary>
         ///check whether employee can login or not
         /// </summary>
@@ -291,6 +331,8 @@ namespace EMS.Data
             }
 
         }
+
+        
 
         /// <summary>
         /// check the email in the database

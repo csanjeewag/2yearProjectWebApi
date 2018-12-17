@@ -68,9 +68,9 @@ namespace EMS.Service
         
 
 
-        public Boolean UpdatePosition(GetUpdatePosition role)
+        public Boolean UpdateEmployeeByPart(GetEmployee employee)
         {
-            return _service.UpdatePosition(role);
+            return _service.UpdateEmployeeByPart(employee);
         }
 
 
@@ -109,9 +109,9 @@ namespace EMS.Service
             return _service.IsEmailUnique(email);
         }
 
-        public Boolean RemoveEmployee(string id)
+        public Boolean RemoveEmployee(string id,Boolean state)
         {
-            return _service.RemoveEmployee(id);
+            return _service.RemoveEmployee(id, state);
         }
 
         public Boolean RegisterEmployee( RegisterActive reg)

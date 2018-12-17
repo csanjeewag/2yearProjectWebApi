@@ -32,29 +32,6 @@ namespace EMS.API.Controllers
         }
 
 
-        /// <summary>
-        /// upload employee details
-        /// </summary>
-        /// <param name="f"></param>
-        /// <returns> return 200 if upload success else return 404</returns>
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("upload")]
-        public async Task<IActionResult> Upload(FileUpload f)
-        {
-            try
-            {
-                var path = Path.Combine(Directory.GetCurrentDirectory(),
-                 "wwwroot/Image", f.Image.FileName);
-                var stream = new FileStream(path, FileMode.Create);
-                f.Image.CopyToAsync(stream);
-                return Ok(new { lenght = f.Image.Length, name = f.Image });
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
 
         
         /// <summary>
@@ -76,8 +53,8 @@ namespace EMS.API.Controllers
         /// <returns></returns>
         [Authorize]
         [Produces("application/json")]
-        [HttpGet("getall")]
-        public IActionResult GetEmployeesDetails()
+        [HttpGet("getallemployees")]
+        public IActionResult GetAllEmployeesDetails()
         {
 
 
@@ -86,7 +63,19 @@ namespace EMS.API.Controllers
 
 
         }
+        [Authorize]
+        [Produces("application/json")]
+        [HttpGet("getall")]
+        public IActionResult GetEmployeesDetails()
+        {
 
+
+            var result = _service.GetEmployeesDetails();
+            var result2 = result.Where(c => c.IsActive == true).ToList();
+            return Ok(result2);
+
+
+        }
         /// <summary>
         /// get employee from id
         /// </summary>
@@ -238,15 +227,15 @@ namespace EMS.API.Controllers
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        [Consumes("application/json")]
-        [HttpPost("updaterole")]
-        public IActionResult UpdatePosition([FromForm]GetUpdatePosition position)
+       
+        [HttpPost("updateemployeedetails")]
+        public IActionResult UpdateEmployeeByPart([FromForm]GetEmployee employee)
         {
 
-            if (_service.UpdatePosition(position))
+            if (_service.UpdateEmployeeByPart(employee))
             {
 
-                return Ok(position);
+                return Ok(employee);
             }
             else
             {
@@ -342,11 +331,16 @@ namespace EMS.API.Controllers
             }
         }
 
-        [Produces("application/json")]
-        [HttpGet("deleteEmployee/{id}")]
-        public Boolean RemoveEmployee(string id)
+        
+        [HttpPost("changeState")]
+        public IActionResult EmployeeChangeSate(GetEmployee employee) 
         {
-            return _service.RemoveEmployee(id);
+            try {
+                var result = _service.RemoveEmployee(employee.EmpEmail, employee.IsActive);
+                return Ok(result);
+            }
+            catch { return BadRequest(); }
+            
         }
 
         [Produces("application/json")]
