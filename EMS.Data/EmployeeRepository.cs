@@ -73,22 +73,57 @@ namespace EMS.Data
                     var count = _context.Employees.Where(c => c.IsActive == true && c.PositionPId == "AD").Count();
                     if(count == 0)
                     {
-                        Position positionAD = new Position();
-                        positionAD.PositionId = "AD";
-                        positionAD.PositionName = "Admin";
-                        _context.Positions.Add(positionAD);
-                        _context.SaveChanges();
+                        var countAD = _context.Positions.Where(c => c.PositionId == "AD").Count();
+                        if (countAD == 0)
+                        {
+                            Position positionUser = new Position();
+                            positionUser.PositionId = "AD";
+                            positionUser.PositionName = "Admin";
+                            _context.Positions.Add(positionUser);
+                            _context.SaveChanges();
+                        }
+                        var countuser = _context.Positions.Where(c => c.PositionId == "User").Count();
+                        if (countuser == 0)
+                        {
+                            Position positionUser = new Position();
+                            positionUser.PositionId = "User";
+                            positionUser.PositionName = "User";
+                            _context.Positions.Add(positionUser);
+                            _context.SaveChanges();
+                        }
+                        var countproject = _context.Projects.Count();
+                        if (countproject == 0)
+                        {
+                            Project project = new Project();
+                            project.IsActive = true;
+                            project.ProjectName = "No Project";
+                            _context.Projects.Add(project);
+                            _context.SaveChanges();
+                        }
+                        var countdepartment = _context.Departments.Count();
+                        if (countdepartment == 0)
+                        {
+                            Department department = new Department();
+                            department.DprtId = "No";
+                            department.DprtName = "No Department";
+                            _context.Departments.Add(department); 
+                            _context.SaveChanges();
+                        }
 
-                        Position positionUser = new Position();
-                        positionUser.PositionId = "AD";
-                        positionUser.PositionName = "Admin";
-                        _context.Positions.Add(positionUser);
-                        _context.SaveChanges();
-
+                        employee.DepartmentDprtId = "No";
+                        employee.ProjectPrId = 1;
                         employee.PositionPId = "AD";
                     }
                     else
                     {
+                        if(employee.ProjectPrId == null)
+                        {
+                            employee.ProjectPrId = 1;
+                        }
+                        if (employee.DepartmentDprtId == null)
+                        {
+                            employee.DepartmentDprtId = "No";
+                        }
                         employee.PositionPId = "User";
                     }
                     
