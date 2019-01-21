@@ -70,7 +70,28 @@ namespace EMS.Data
                     employee.StartDate = today;
                     employee.LastUpdate = today;
                     employee.RegisterCode = regitercode.ToString();
-                    employee.PositionPId = "RC";
+                    var count = _context.Employees.Where(c => c.IsActive == true && c.PositionPId == "AD").Count();
+                    if(count == 0)
+                    {
+                        Position positionAD = new Position();
+                        positionAD.PositionId = "AD";
+                        positionAD.PositionName = "Admin";
+                        _context.Positions.Add(positionAD);
+                        _context.SaveChanges();
+
+                        Position positionUser = new Position();
+                        positionUser.PositionId = "AD";
+                        positionUser.PositionName = "Admin";
+                        _context.Positions.Add(positionUser);
+                        _context.SaveChanges();
+
+                        employee.PositionPId = "AD";
+                    }
+                    else
+                    {
+                        employee.PositionPId = "User";
+                    }
+                    
                     _context.Employees.Add(employee);
                     _context.SaveChanges();
                     //return register code after signup
@@ -90,13 +111,18 @@ namespace EMS.Data
         /// </summary>
         /// <param name="employee"></param>
         /// <returns>boolean</returns>
-        public Boolean UpdateEmployee(Employee employee)
+        public int UpdateEmployee(Employee employee)
         {
+            
+            
 
             try
             {   //get employees' positionid and profile pic name
-                var employeedetail = _context.Employees.Where(c => c.EmpEmail == employee.EmpEmail).Select(c => new { c.EmpProfilePicture, c.PositionPId, c.RegisterCode, c.Id }).FirstOrDefault();
-                
+                var employeedetail = _context.Employees.Where(c => c.EmpEmail == employee.EmpEmail).Select(c => new { c.EmpProfilePicture, c.PositionPId, c.RegisterCode, c.Id, c.EmpPassword }).FirstOrDefault();
+                if(employee.EmpPassword != employeedetail.EmpPassword)
+                {
+                    return 2;
+                }
                 if (employee.PositionPId == null || employee.PositionPId == "")
                 { employee.PositionPId = employeedetail.PositionPId; }
 
@@ -107,11 +133,11 @@ namespace EMS.Data
                 employee.Id = employeedetail.Id;
                 _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
-                return true;
+                return 1;
             }
             catch
             {
-                return false;
+                return 0;
             }
         }
  
@@ -219,7 +245,11 @@ namespace EMS.Data
                 int numIterations = rand.Next(10000, 99999);
 
               var  employee = _context.Employees.Where(c => c.EmpEmail == email).FirstOrDefault();
-
+                var count = _context.Employees.Where(c => c.IsActive == true && c.PositionPId == "AD").Count();
+                if(employee.PositionPId=="AD" && count == 1)
+                {
+                    return false;
+                }
                 employee.IsActive = state;
 
                 employee.RegisterCode = numIterations.ToString();
@@ -260,17 +290,18 @@ namespace EMS.Data
         {
 
             try
-            {/*
-                // assign employee details
-                var employee = _context.Employees.Where(c => c.EmpEmail == position.Email).FirstOrDefault();
-                //change position
-                employee.PositionPId = position.PositionId;
-                _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges(); */
+            {
                 Employee employee = new Employee();
                 employee = _context.Employees.Where(c => c.EmpEmail == emp.EmpEmail).FirstOrDefault();
+
                 if(emp.PositionPId != null)
                 {
+                    var count = _context.Employees.Where(c => c.IsActive == true && c.PositionPId == "AD").Count();
+                    if(count == 1 && employee.PositionPId == "AD")
+                    {
+                        return false;
+                    }
+
                     employee.PositionPId = emp.PositionPId;
                 }
                 if (emp.DepartmentDprtId != null)
@@ -361,11 +392,11 @@ namespace EMS.Data
         public Boolean IsEmail(GetEmail email)
         {
             var data = _context.Employees
-                  .Where(c => c.EmpEmail == email.Email)
-                  .Select(c => c.IsActive)
+                  .Where(c => c.EmpEmail == email.Email && c.IsActive == true)
+                  .Select(c => c.EmpId)
                   .FirstOrDefault();
           
-            if (data)
+            if (data != null)
             {
                 return true;
             }
@@ -424,10 +455,12 @@ namespace EMS.Data
                     Random rand = new Random((int)DateTime.Now.Ticks);
                     int regitercode = rand.Next(10000, 99999);
 
-                    Employee employee = new Employee();
-                    employee = GetEmployeeByEmail(email);
+                    //  Employee employee = new Employee();
+                    // employee = GetEmployeeByEmail(email);
+                    Employee employee = _context.Employees.Where(c => c.IsActive == true && c.EmpEmail == email).FirstOrDefault();
                     employee.RegisterCode = regitercode.ToString();
-                    UpdateEmployee(employee);
+                    _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    _context.SaveChanges();
                     return regitercode;
 
 
@@ -457,12 +490,14 @@ namespace EMS.Data
                 Random rand = new Random((int)DateTime.Now.Ticks);
                 int numIterations = rand.Next(10000, 99999);
                 Employee employee = new Employee();
-                employee = GetEmployeeByEmail(getEP.EmpEmail);
+                employee = _context.Employees
+                .Where(c => c.EmpEmail == getEP.EmpEmail && c.IsActive == true).FirstOrDefault();
                 if (employee.RegisterCode == getEP.Code)
                 {
                     employee.EmpPassword = getEP.EmpPassword;
                     employee.RegisterCode = numIterations.ToString();
-                    UpdateEmployee(employee);
+                    _context.Entry(employee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    _context.SaveChanges();
                     return true;
                 }
                 return false;
@@ -514,6 +549,21 @@ namespace EMS.Data
             catch { return false; }
 
         }
+
+        public Boolean ChangePassword(ChangePassword employee)
+        {
+            Employee newemployee = _context.Employees.Where(c => c.EmpEmail == employee.EmployeeEmail && c.IsActive == true && c.EmpPassword == employee.EmployeeOldPassword)
+                                 .FirstOrDefault();
+            if(newemployee != null)
+            {
+                newemployee.EmpPassword = employee.EmployeeNewPassword;
+                 _context.Entry(newemployee).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
 
       
     }

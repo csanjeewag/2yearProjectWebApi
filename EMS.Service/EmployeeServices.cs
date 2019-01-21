@@ -55,7 +55,7 @@ namespace EMS.Service
        
        
 
-        public Boolean UpdateEmployee(Employee emp)
+        public int UpdateEmployee(Employee emp)
         {
             
             emp.IsActive = true;
@@ -129,7 +129,13 @@ namespace EMS.Service
             return _service.SetEmailAndPassword(getEP);
         }
 
-    
+        public Boolean ChangePassword(ChangePassword changePassword)
+        {
+            return _service.ChangePassword(changePassword);
+        }
+
+
+
     }
 
 }

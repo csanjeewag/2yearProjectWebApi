@@ -138,6 +138,8 @@ namespace EMS.API.Controllers
                     res = AddFiles.AddImage(emp.EmpProfilePicture, emp.EmpId);
 
                 }
+                Hash hash = new Hash();
+                emp.EmpPassword = hash.HashPassword(emp.EmpPassword);
 
                 Employee employee = new Employee();
                 employee.EmpId = emp.EmpId;
@@ -193,6 +195,8 @@ namespace EMS.API.Controllers
                 res = AddFiles.AddImage(emp.EmpProfilePicture, emp.EmpId);
 
             }
+            Hash hash = new Hash();
+            emp.EmpPassword = hash.HashPassword(emp.EmpPassword);
 
             Employee employee = new Employee();
             employee.EmpId = emp.EmpId;
@@ -210,14 +214,19 @@ namespace EMS.API.Controllers
             employee.StartDate = emp.StartDate;
             employee.ProjectPrId = emp.ProjectId;
 
-            if (_service.UpdateEmployee(employee))
+            if (_service.UpdateEmployee(employee)==1)
             {
 
-                return Ok(emp);
+                return Ok("Changes success full!");
+            }
+            if (_service.UpdateEmployee(employee) == 2)
+            {
+
+                return BadRequest("Password not match, Try again.");
             }
             else
             {
-                return BadRequest("there error");
+                return BadRequest("there are error");
             }
         }
 
@@ -231,6 +240,8 @@ namespace EMS.API.Controllers
         [HttpPost("updateemployeedetails")]
         public IActionResult UpdateEmployeeByPart([FromForm]GetEmployee employee)
         {
+            Hash hash = new Hash();
+            employee.EmpPassword = hash.HashPassword(employee.EmpPassword);
 
             if (_service.UpdateEmployeeByPart(employee))
             {
@@ -254,7 +265,8 @@ namespace EMS.API.Controllers
         [HttpPost("login")]
         public IActionResult loginId([FromBody]LoginId logins)
         {
-
+            Hash hash = new Hash();
+            logins.EmpPassword = hash.HashPassword(logins.EmpPassword);
 
             if (_service.LoginId(logins))
             {
@@ -284,7 +296,8 @@ namespace EMS.API.Controllers
         [HttpPost("loginEmail")]
         public IActionResult loginEmail([FromBody]LoginEmail logins)
         {
-            
+            Hash hash = new Hash();
+            logins.EmpPassword = hash.HashPassword(logins.EmpPassword);
 
             if (_service.LoginEmail(logins))
             {
@@ -337,7 +350,15 @@ namespace EMS.API.Controllers
         {
             try {
                 var result = _service.RemoveEmployee(employee.EmpEmail, employee.IsActive);
-                return Ok(result);
+                if (result)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+                
             }
             catch { return BadRequest(); }
             
@@ -374,11 +395,31 @@ namespace EMS.API.Controllers
         [HttpPost("setpassword")]
         public IActionResult SetEmailAndPassword([FromBody]GetEmailPassword getEP)
         {
-            if(_service.SetEmailAndPassword(getEP))
+            Hash hash = new Hash();
+            getEP.EmpPassword = hash.HashPassword(getEP.EmpPassword);
+
+            if (_service.SetEmailAndPassword(getEP))
             {
                 return Ok();
             }
           return  BadRequest();
+        }
+
+        /// <summary>
+        /// change employee password
+        /// </summary>
+        /// <param name="emp"></param>
+        /// <returns></returns>
+        [HttpPost("changepasswordemployee")]
+        public IActionResult ChangePassword(ChangePassword changePassword)
+        {
+            Hash hash = new Hash();
+            changePassword.EmployeeOldPassword = hash.HashPassword(changePassword.EmployeeOldPassword);
+            changePassword.EmployeeNewPassword = hash.HashPassword(changePassword.EmployeeNewPassword);
+
+            if (_service.ChangePassword(changePassword))
+                return Ok("password change success");
+            else return BadRequest("password change failed");
         }
     }
 }
