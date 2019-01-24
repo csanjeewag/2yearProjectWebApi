@@ -22,6 +22,8 @@ public class Task
         public DateTime AddDate { get; set; }
         public string EventName { get; set; }
         public float BudgetedCost { get; set; }
+        public float ActualCost { get; set; }
+
         public string Description { get; set; }
         public Boolean Status { get; set; }
               

@@ -10,7 +10,7 @@ namespace EMS.Data.Models
    public  class EmployeeTask
     {
         [Key]
-        public int Id { get; set; }
+        public int EId { get; set; }
         [Key]
         public int TaskId { get; set; }
         public virtual Employee Employee { get; set; }

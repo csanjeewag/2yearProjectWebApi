@@ -9,13 +9,22 @@ namespace EMS.Data.Models
 {
     public class TaskInformation
     {
-       [Key]
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int FileID { get; set; }
-        public string FileName { get; set; }
+        public int InfoID { get; set; }
+        public string InfoDescription { get; set; }
+        public Boolean IsComplete { get; set; }
+        public Boolean IsActive { get; set; }
+
+        [ForeignKey("Employee")]
+        public Employee Id { get; set; }
+
         [ForeignKey("Task")]
         public Task TaskId { get; set; }
 
+       [ForeignKey("Contact")]
+       public Contact ContactId { get; set; }
+        
     }
 }
