@@ -30,3 +30,19 @@ D:\softawre project\WebAPI\Project API\EMS3\EMS.API\obj\Release\netcoreapp2.0\EM
 D:\softawre project\WebAPI\Project API\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.csproj.CopyComplete
 D:\softawre project\WebAPI\Project API\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.dll
 D:\softawre project\WebAPI\Project API\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.pdb
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.AssemblyInfoInputs.cache
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.AssemblyInfo.cs
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.dll
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.pdb
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.API.deps.json
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.API.runtimeconfig.json
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.API.runtimeconfig.dev.json
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.API.dll
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.API.pdb
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.Data.dll
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.Service.dll
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.Data.pdb
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\bin\Release\netcoreapp2.0\EMS.Service.pdb
+C:\Users\USER\Desktop\newEms\EMS3\EMS.API\obj\Release\netcoreapp2.0\EMS.API.csproj.CopyComplete

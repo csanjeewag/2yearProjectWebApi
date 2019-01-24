@@ -25,12 +25,16 @@ namespace EMS.Service
 
         }
 
-        public Boolean AddTask(Task t)
+        public int AddTask(Task t)
         {
             return _service.AddTask(t);
         }
 
-
+        
+        public Boolean AddEmployeeTask(EmployeeTask etask)
+        {
+            return _service.AddEmployeeTask(etask);
+        }
 
 
         /// <summary>
@@ -49,10 +53,7 @@ namespace EMS.Service
             return _service.UpdateTask(t);
         }
        
-         public Boolean AddInformation(TaskInformation tinfo)
-         {
-             return _service.AddInformation(tinfo);
-         }
+        
 
         public IEnumerable<Task> GetTaskDetails()
         {
@@ -63,5 +64,7 @@ namespace EMS.Service
         public IEnumerable<Employee> GetEmployeesForTask(int id) {
             return _service.GetEmployeesForTask(id);
         }
+
+        
     }
 }

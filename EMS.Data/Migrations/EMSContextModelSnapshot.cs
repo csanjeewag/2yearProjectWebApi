@@ -71,6 +71,44 @@ namespace EMS.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("EMS.Data.Models.Contact", b =>
+                {
+                    b.Property<int>("ContactId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ContactType");
+
+                    b.Property<bool>("IsActive");
+
+                    b.HasKey("ContactId");
+
+                    b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("EMS.Data.Models.ContactDetails", b =>
+                {
+                    b.Property<int>("ContactDetailId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Address");
+
+                    b.Property<int?>("Contact");
+
+                    b.Property<string>("ContactDescription");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Number1");
+
+                    b.Property<int>("Number2");
+
+                    b.HasKey("ContactDetailId");
+
+                    b.HasIndex("Contact");
+
+                    b.ToTable("ContactDetails");
+                });
+
             modelBuilder.Entity("EMS.Data.Models.CricketTeam", b =>
                 {
                     b.Property<string>("CriTeamID")
@@ -159,11 +197,11 @@ namespace EMS.Data.Migrations
 
             modelBuilder.Entity("EMS.Data.Models.EmployeeTask", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("EId");
 
                     b.Property<int>("TaskId");
 
-                    b.HasKey("Id", "TaskId");
+                    b.HasKey("EId", "TaskId");
 
                     b.HasIndex("TaskId");
 
@@ -315,6 +353,8 @@ namespace EMS.Data.Migrations
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<float>("ActualCost");
+
                     b.Property<DateTime>("AddDate");
 
                     b.Property<float>("BudgetedCost");
@@ -338,14 +378,26 @@ namespace EMS.Data.Migrations
 
             modelBuilder.Entity("EMS.Data.Models.TaskInformation", b =>
                 {
-                    b.Property<int>("FileID")
+                    b.Property<int>("InfoID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FileName");
+                    b.Property<int?>("Contact");
+
+                    b.Property<int?>("Employee");
+
+                    b.Property<string>("InfoDescription");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsComplete");
 
                     b.Property<int?>("Task");
 
-                    b.HasKey("FileID");
+                    b.HasKey("InfoID");
+
+                    b.HasIndex("Contact");
+
+                    b.HasIndex("Employee");
 
                     b.HasIndex("Task");
 
@@ -498,6 +550,13 @@ namespace EMS.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("EMS.Data.Models.ContactDetails", b =>
+                {
+                    b.HasOne("EMS.Data.Models.Contact", "ContactId")
+                        .WithMany()
+                        .HasForeignKey("Contact");
+                });
+
             modelBuilder.Entity("EMS.Data.Models.Employee", b =>
                 {
                     b.HasOne("EMS.Data.Models.Department")
@@ -518,7 +577,7 @@ namespace EMS.Data.Migrations
                 {
                     b.HasOne("EMS.Data.Models.Employee", "Employee")
                         .WithMany("EmployeeTasks")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("EId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EMS.Data.Models.Task", "Task")
@@ -537,6 +596,14 @@ namespace EMS.Data.Migrations
 
             modelBuilder.Entity("EMS.Data.Models.TaskInformation", b =>
                 {
+                    b.HasOne("EMS.Data.Models.Contact", "ContactId")
+                        .WithMany()
+                        .HasForeignKey("Contact");
+
+                    b.HasOne("EMS.Data.Models.Employee", "Id")
+                        .WithMany()
+                        .HasForeignKey("Employee");
+
                     b.HasOne("EMS.Data.Models.Task", "TaskId")
                         .WithMany("TaskInformation")
                         .HasForeignKey("Task");

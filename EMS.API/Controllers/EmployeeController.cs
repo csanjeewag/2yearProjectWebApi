@@ -272,11 +272,11 @@ namespace EMS.API.Controllers
             {
                 var data = _service.GetEmployeeById(logins.EmpId);
                 var Emprole = data.PositionPId;
-                var Empid = data.EmpId;
+                var Empid = data.Id;
                 var EmpName = data.EmpName;
                 
 
-                GetTokenModel token = GetToken.getToken(Emprole, Empid, EmpName );
+                GetTokenModel token = GetToken.getToken(Emprole, Empid.ToString(), EmpName );
 
                 return Ok(new
                 {

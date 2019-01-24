@@ -26,7 +26,7 @@ namespace EMS.Data
 
            
             var test = _context.EmployeeTasks
-                .Where(et => et.Id == id)
+                .Where(et => et.EId == id)
                 .Select(et => et.Task)
                 .ToList();
             return test;
@@ -39,11 +39,35 @@ namespace EMS.Data
         /// </summary>
         /// <param name="task"></param>
         /// <returns>State of adding a task</returns>
-        public Boolean AddTask(Task task)
+        public int AddTask(Task task)
         {
             try
             {
                 _context.Tasks.Add(task);
+                _context.SaveChanges();
+
+                int result = _context.Tasks.Max(p=> p.TaskId);
+
+                return result;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+
+
+    /// <summary>
+    /// Add details for EmployeeTask table
+    /// </summary>
+    /// <param name="task"></param>
+    /// <returns></returns>
+        public Boolean AddEmployeeTask(EmployeeTask etask)
+        {
+            try
+            {
+                _context.EmployeeTasks.Add(etask);
                 _context.SaveChanges();
 
                 return true;
@@ -54,22 +78,17 @@ namespace EMS.Data
             }
         }
 
-      /// <summary>
-      /// Return task by Task ID
-      /// </summary>
-      /// <param name="id"></param>
-      /// <returns>Task with the id TaskId=id</returns>
-     public Task GetTaskById(int id)
+
+
+        /// <summary>
+        /// Return task by Task ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Task with the id TaskId=id</returns>
+        public Task GetTaskById(int id)
         {
 
-            /* var test = _context.Tasks
-                 .Where( c => c.TaskId==id)
-                 .Join(_context.Employees,
-                 t => t.EmployeeEmpId, e => e.EmpId, (t, e) =>
-
-                    new Task { TaskId = t.TaskId, TaskName = t.TaskName, StartDate = t.StartDate, EndDate = t.EndDate, BudgetedCost = t.BudgetedCost, Description = t.Description, Admin = t.Admin, EventName = t.EventName, EmployeeEmpId = e.EmpName, Status = t.Status })
-                  .FirstOrDefault();
-             return test;*/
+           
 
             var test = _context.EmployeeTasks
                 .Where(et => et.TaskId == id)
@@ -98,20 +117,7 @@ namespace EMS.Data
                 return false;
             }
         }
-        public Boolean AddInformation(TaskInformation tinfo)
-         {
-             try
-             {
-                 _context.TaskInformations.Add(tinfo);
-                 _context.SaveChanges();
-
-                 return true;
-             }
-             catch
-             {
-                 return false;
-             }
-         }
+        
 
 
         public IEnumerable<Task> GetTaskDetails()
@@ -130,5 +136,7 @@ namespace EMS.Data
             return test;
 
         }
+
+
     }
 }

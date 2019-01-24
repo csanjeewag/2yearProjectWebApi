@@ -57,11 +57,37 @@ namespace EMS.API.Controllers
         [Produces("application/json")]
         [Consumes("application/json")]
         [HttpPost("create")]
-        public IActionResult AddTask([FromBody]Task t)
+        public IActionResult AddTask([FromBody]GetTask t)
         {
+            Task task = new Task();
+            task.EventName = t.EventName;
+            task.EndDate = t.EndDate;
+            task.StartDate = t.StartDate;
+            task.Status = t.Status;
+            task.TaskName = t.TaskName;
+            task.Description = t.Description;
+            task.BudgetedCost = t.BudgetedCost;
+            task.AddDate = t.AddDate;
 
-            if (_service.AddTask(t))
+
+            int taskid = _service.AddTask(task);
+
+            if (taskid != 0)
+              
             {
+
+                EmployeeTask eTask = new EmployeeTask();
+                //eTask.EmpId = t.Employees[0];
+                int x = 0;
+                foreach (var i in t.Employees)
+                {
+                   // int x = Int32.Parse(i);
+                    eTask.EId = t.Employees[x];
+                    eTask.TaskId = taskid;
+                    _service.AddEmployeeTask(eTask);
+                    x++;
+                }
+               
 
                 return Ok(t);
             }
@@ -70,6 +96,9 @@ namespace EMS.API.Controllers
                 return BadRequest("error");
             }
         }
+
+
+       
 
 
         /// <summary>
@@ -145,7 +174,7 @@ namespace EMS.API.Controllers
         /// <param name="tinfo"></param>
         /// <returns></returns>
 
-         [Produces("application/json")]
+         /*[Produces("application/json")]
          [Consumes("application/json")]
          [HttpPost("addinfo")]
          public IActionResult AddInformation([FromBody]TaskInformation tinfo)
@@ -160,7 +189,8 @@ namespace EMS.API.Controllers
              {
                  return BadRequest("error");
              }
-         }
+         }*/
+
         [Produces("application/json")]
         [HttpGet("getempfortask/{id}")]
         public IEnumerable<Employee> GetEmployeesForTask(int id)
@@ -168,6 +198,8 @@ namespace EMS.API.Controllers
             return _service.GetEmployeesForTask(id);
 
         }
+
+        
 
 
     }
